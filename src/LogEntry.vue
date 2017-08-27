@@ -12,27 +12,38 @@
       </v-tabs-item>
     </v-tabs-bar>
     <v-tabs-content
-      v-for="i in 2"
-      :key="i"
-      :id="'tab-' + i"
+      :key="1"
+      :id="'tab-' + 1"
     >
       <v-card flat>
         <app-steppers></app-steppers>
       </v-card>
     </v-tabs-content>
+
+    <v-tabs-content
+      :key="2"
+      :id="'tab-' + 2"
+    >
+      <v-card flat>
+        <app-static></app-static>
+      </v-card>
+    </v-tabs-content>
+
   </v-tabs>
 </template>
 
 
     <script>
       import Steppers from './Steppers.vue';
+      import Static from './Static.vue';
       export default {
         data () {
           return {
           }
         },
         components: {
-          'app-steppers': Steppers
+          'app-steppers': Steppers,
+          'app-static': Static
         }
       }
     </script>

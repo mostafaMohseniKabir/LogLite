@@ -1,0 +1,61 @@
+<template>
+  <v-stepper v-model="state" vertical @input="changeState">
+    <v-stepper-step step="1" v-bind:complete="state > 1">
+      Stert Time
+      <small>Select start time of the task!</small>
+    </v-stepper-step>
+    <v-stepper-content step="1">
+      <app-timePicker></app-timePicker>
+      <v-btn primary @click.native="state = 2">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step step="2" v-bind:complete="state > 2">
+      End Time
+      <small>Select end time of the task!</small>
+    </v-stepper-step>
+    <v-stepper-content step="2">
+      <app-timePicker></app-timePicker>
+      <v-btn primary @click.native="state = 3">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step step="3" v-bind:complete="state > 3">
+      Date
+      <small>Select date of the task!</small>
+    </v-stepper-step>
+    <v-stepper-content step="3">
+      <app-datePicker></app-datePicker>
+      <v-btn primary @click.native="state = 4">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step step="4" v-bind:complete="state > 4">
+      Description
+      <small>Write or select a tag for the task!</small>
+    </v-stepper-step>
+    <v-stepper-content step="4">
+      <app-textField></app-textField>
+      <v-btn primary @click.native="state = 1">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+  </v-stepper>
+</template>
+
+  <script>
+  import datePicker from './datePicker.vue';
+  import timePicker from './timePicker.vue';
+  import textField from './textField.vue';
+  export default {
+    data () {
+      return {
+        state: 1
+      }
+    },
+    components: {
+      'app-datePicker': datePicker,
+      'app-timePicker': timePicker,
+      'app-textField': textField
+    }
+  }
+</script>
