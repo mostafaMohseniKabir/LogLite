@@ -17,7 +17,7 @@
       :id="'tab-' + i"
     >
       <v-card flat>
-        <app-steppers :enterState='enterState' @stateChanged='enterState=$event'></app-steppers>
+        <app-steppers></app-steppers>
       </v-card>
     </v-tabs-content>
   </v-tabs>
@@ -29,7 +29,6 @@
       export default {
         data () {
           return {
-            enterState : 1
           }
         },
         components: {
