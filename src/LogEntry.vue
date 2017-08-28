@@ -16,7 +16,7 @@
       :id="'tab-' + 1"
     >
       <v-card flat>
-        <app-steppers></app-steppers>
+        <app-dynamic></app-dynamic>
       </v-card>
     </v-tabs-content>
 
@@ -34,7 +34,7 @@
 
 
     <script>
-      import Steppers from './Steppers.vue';
+      import Dynamic from './Dynamic.vue';
       import Static from './Static.vue';
       export default {
         data () {
@@ -42,7 +42,7 @@
           }
         },
         components: {
-          'app-steppers': Steppers,
+          'app-dynamic': Dynamic,
           'app-static': Static
         }
       }

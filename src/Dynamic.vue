@@ -1,8 +1,8 @@
 <template>
-  <v-stepper v-model="state" vertical @input="changeState">
+  <v-stepper v-model="state" vertical>
     <v-stepper-step step="1" v-bind:complete="state > 1">
-      Stert Time
-      <small>Select start time of the task!</small>
+      Count your work time
+      <small>Push the start button to start counting!</small>
     </v-stepper-step>
     <v-stepper-content step="1">
       <app-timer></app-timer>
@@ -16,17 +16,15 @@
     </v-stepper-step>
     <v-stepper-content step="2">
       <app-textField></app-textField>
-      <v-btn primary @click.native="state = 1">Continue</v-btn>
+      <v-btn primary @click.native="state = 1">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
 
   <script>
-  import datePicker from './datePicker.vue';
-  import timePicker from './timePicker.vue';
-  import textField from './textField.vue';
   import timer from './timer.vue';
+  import textField from './textField.vue';
   export default {
     data () {
       return {
@@ -34,8 +32,6 @@
       }
     },
     components: {
-      'app-datePicker': datePicker,
-      'app-timePicker': timePicker,
       'app-textField': textField,
       'app-timer': timer
     }

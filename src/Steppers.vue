@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="state" vertical @input="changeState">
+  <v-stepper v-model="state" vertical>
     <v-stepper-step step="1" v-bind:complete="state > 1">
       Timer
       <small>Time is money!:)</small>

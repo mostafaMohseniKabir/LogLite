@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="state" vertical @input="changeState">
+  <v-stepper v-model="state" vertical>
     <v-stepper-step step="1" v-bind:complete="state > 1">
       Stert Time
       <small>Select start time of the task!</small>
@@ -36,7 +36,7 @@
     </v-stepper-step>
     <v-stepper-content step="4">
       <app-textField></app-textField>
-      <v-btn primary @click.native="state = 1">Continue</v-btn>
+      <v-btn primary @click.native="state = 1">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
   </v-stepper>

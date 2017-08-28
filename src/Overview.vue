@@ -4,35 +4,46 @@
       <v-tabs-slider class="yellow"></v-tabs-slider>
       <v-tabs-item href="#tab-1">
         <v-icon>view_headline</v-icon>
-        Today logs
+        Log List
       </v-tabs-item>
       <v-tabs-item href="#tab-2">
         <v-icon>assessment</v-icon>
-        Statistic
+        Statistics
       </v-tabs-item>
     </v-tabs-bar>
     <v-tabs-content
-      v-for="i in 2"
-      :key="i"
-      :id="'tab-' + i"
+      :key="1"
+      :id="'tab-' + 1"
     >
-      <v-card flat>
-        <app-steppers></app-steppers>
+      <v-card flat xs6>
+        <app-log-list></app-log-list>
       </v-card>
     </v-tabs-content>
+
+    <v-tabs-content
+      :key="2"
+      :id="'tab-' + 2"
+    >
+      <v-card flat>
+        <app-statistics></app-statistics>
+      </v-card>
+    </v-tabs-content>
+
   </v-tabs>
 </template>
 
 
     <script>
-      import Steppers from './Steppers.vue';
+      import Statistics from './Statistics.vue';
+      import LogList from './LogList.vue';
       export default {
         data () {
           return {
           }
         },
         components: {
-          'app-steppers': Steppers
+          'app-log-list': LogList,
+          'app-statistics': Statistics
         }
       }
     </script>
