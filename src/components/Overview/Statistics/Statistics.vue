@@ -3,10 +3,10 @@
 
     <v-layout>
       <v-flex>
-        <app-filter></app-filter>
+        <slot name="filterTag"></slot>
       </v-flex>
       <v-flex>
-        <app-filter></app-filter>
+        <slot name="filterDay"></slot>
       </v-flex>
     </v-layout>
 
