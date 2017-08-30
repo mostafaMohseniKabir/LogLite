@@ -2,24 +2,18 @@ import Vue from 'vue';
 import App from './App.vue';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-import LogEntry from './components/LogEntry/LogEntry.vue';
-import Overview from './components/Overview/Overview.vue';
+import Routes from './routes.js';
 
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 
-const routes = [
-  {path: '/', component:LogEntry},
-  {path: '/Overview', component:Overview}
-];
-
-const router = new VueRouter({
-  routes,
+const Router = new VueRouter({
+  routes: Routes,
   mode: 'history'
 });
 
 new Vue({
   el: '#app',
-  router,
-  render: h => h(App)
+  render: h => h(App),
+  router: Router
 })
