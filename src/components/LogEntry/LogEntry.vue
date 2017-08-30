@@ -3,20 +3,20 @@
     <v-tabs-bar slot="activators" class="cyan">
       <v-tabs-slider class="yellow"></v-tabs-slider>
       <v-tabs-item href="#tab-1">
-        <v-icon>view_headline</v-icon>
-        Log List
+        <v-icon>watch</v-icon>
+        Dynamic
       </v-tabs-item>
       <v-tabs-item href="#tab-2">
-        <v-icon>assessment</v-icon>
-        Statistics
+        <v-icon>watch_later</v-icon>
+        Static
       </v-tabs-item>
     </v-tabs-bar>
     <v-tabs-content
       :key="1"
       :id="'tab-' + 1"
     >
-      <v-card flat xs6>
-        <app-log-list></app-log-list>
+      <v-card flat>
+        <app-dynamic></app-dynamic>
       </v-card>
     </v-tabs-content>
 
@@ -25,7 +25,7 @@
       :id="'tab-' + 2"
     >
       <v-card flat>
-        <app-statistics></app-statistics>
+        <app-static></app-static>
       </v-card>
     </v-tabs-content>
 
@@ -34,16 +34,16 @@
 
 
     <script>
-      import Statistics from './Statistics.vue';
-      import LogList from './LogList.vue';
+      import Dynamic from './Dynamic/Dynamic.vue';
+      import Static from './Static/Static.vue';
       export default {
         data () {
           return {
           }
         },
         components: {
-          'app-log-list': LogList,
-          'app-statistics': Statistics
+          'app-dynamic': Dynamic,
+          'app-static': Static
         }
       }
     </script>

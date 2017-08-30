@@ -45,7 +45,7 @@
   <script>
   import datePicker from './datePicker.vue';
   import timePicker from './timePicker.vue';
-  import textField from './textField.vue';
+  import textField from '../common/LogInfo.vue';
   export default {
     data () {
       return {

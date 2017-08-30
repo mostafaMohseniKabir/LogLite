@@ -2,9 +2,9 @@ import Vue from 'vue';
 import App from './App.vue';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-import LogEntry from './LogEntry.vue';
-import Overview from './Overview.vue';
-import Filter from './Filter.vue';
+import LogEntry from './components/LogEntry/LogEntry.vue';
+import Overview from './components/Overview/Overview.vue';
+import Filter from './components/Overview/common/Filter.vue';
 
 Vue.use(VueRouter);
 Vue.use(Vuetify);

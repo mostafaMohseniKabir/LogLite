@@ -14,7 +14,6 @@
       enable-resize-watcher
       v-model="drawer"
     >
-
       <v-list dense>
         <v-list-tile v-for="item in items" :key="item.text">
             <v-list-tile-action>
