@@ -1,35 +1,47 @@
 <template>
-  <div>
-
-    <v-layout>
-      <v-flex>
-        <slot name="filterTag"></slot>
-      </v-flex>
-      <v-flex>
-        <slot name="filterDay"></slot>
-      </v-flex>
-    </v-layout>
-
       <v-card>
-        <v-card-title primary-title>
-              <h1 class="headline mb-0 orange--text"> {{Tag}} </h1>
-              <v-divider></v-divider>
-              <h1 class="headline mb-0 orange--text"> {{Time}} </h1>
-        </v-card-title>
-        <v-card-actions>
-          <v-btn flat class="orange--text">Delete</v-btn>
-          <v-btn flat class="orange--text">Edit</v-btn>
-        </v-card-actions>
+
+        <v-toolbar class="teal" dark>
+          <v-toolbar-side-icon></v-toolbar-side-icon>
+          <v-toolbar-title>Settings</v-toolbar-title>
+        </v-toolbar>
+
+        <v-layout>
+          <v-flex>
+            <slot name="filterTag"></slot>
+          </v-flex>
+          <v-flex>
+            <slot name="filterDay"></slot>
+          </v-flex>
+        </v-layout>
+
+        <v-divider></v-divider>
+
+        <v-list two-line subheader>
+          <v-subheader>Logs of wednesday</v-subheader>
+          <v-list-tile avatar>
+            <v-list-tile-action>
+              <v-checkbox v-model="notifications"></v-checkbox>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Tag</v-list-tile-title>
+              <v-list-tile-sub-title>startTime-endTime ---- date</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+
       </v-card>
-    </div>
 </template>
+
 
 <script>
   export default {
     data () {
       return {
-        Tag : 'Meet Lite',
-        Time : '10:30 - 12'
+        notifications: false,
+        sound: false,
+        video: false,
+        invites: false
       }
     }
   }

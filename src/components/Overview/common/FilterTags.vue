@@ -3,7 +3,7 @@
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
-            <v-subheader>Appended icon</v-subheader>
+            <v-subheader>Day</v-subheader>
           </v-flex>
           <v-flex xs6>
             <v-select

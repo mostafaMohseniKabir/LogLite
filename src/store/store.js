@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
   strict: true,
   state: {
     datePickerState: null,
-    timePickerState: null,
+    startTimePickerState: null,
+    endTimePickerState: null,
     selectTagState: null,
     filterTagsState: null,
     filterDaysState: null,
@@ -23,17 +24,15 @@ export const store = new Vuex.Store({
       { text: 'MeetLite' },
       { text: 'TechLite' },
       { text: 'Vue.js' }
-    ]
-  },
-  getters: {
-
+    ],
+    logsInfo: []
   },
   mutations: {
     datePickerStateChange: (state, payload) => {
       state.datePickerState = payload;
     },
     timePickerStateChange: (state, payload) => {
-      state.timePickerState = payload;
+      state.startTimePickerState = payload;
     },
     selectTagStateChange: (state, payload) => {
       state.selectTagState = payload;
@@ -43,7 +42,17 @@ export const store = new Vuex.Store({
     },
     filterDaysStateChange: (state, payload) => {
       state.filterState = payload;
+    },
+    submitLogInfo : state => {
+      state.logsInfo.push({
+        tag: state.selectTagState,
+        startTime: state.startTimePickerState,
+        endTime: state.startTimePickerState,
+        date: state.datePickerState
+      })
     }
+  },
+  getters: {
   },
   actions: {
 
