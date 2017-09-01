@@ -1,42 +1,42 @@
 <template>
-  <v-stepper v-model="state" vertical>
-    <v-stepper-step step="1" v-bind:complete="state > 1">
+  <v-stepper v-model="staticSteppersState" vertical>
+    <v-stepper-step step="1" v-bind:complete="staticSteppersState > 1">
       Stert Time
       <small>Select start time of the task!</small>
     </v-stepper-step>
     <v-stepper-content step="1">
       <app-timePicker></app-timePicker>
-      <v-btn primary @click.native="state = 2">Continue</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 2">Continue</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
-    <v-stepper-step step="2" v-bind:complete="state > 2">
+    <v-stepper-step step="2" v-bind:complete="staticSteppersState > 2">
       End Time
       <small>Select end time of the task!</small>
     </v-stepper-step>
     <v-stepper-content step="2">
       <app-timePicker></app-timePicker>
-      <v-btn primary @click.native="state = 3">Continue</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 3">Continue</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
-    <v-stepper-step step="3" v-bind:complete="state > 3">
+    <v-stepper-step step="3" v-bind:complete="staticSteppersState > 3">
       Date
       <small>Select date of the task!</small>
     </v-stepper-step>
     <v-stepper-content step="3">
       <app-datePicker></app-datePicker>
-      <v-btn primary @click.native="state = 4">Continue</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 4">Continue</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
-    <v-stepper-step step="4" v-bind:complete="state > 4">
+    <v-stepper-step step="4" v-bind:complete="staticSteppersState > 4">
       Description
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="4">
       <app-textField></app-textField>
-      <v-btn primary @click.native="state = 1">Finish</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 1">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
   </v-stepper>
@@ -49,7 +49,7 @@
   export default {
     data () {
       return {
-        state: 1
+        staticSteppersState: 1
       }
     },
     components: {
