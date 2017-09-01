@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
   strict: true,
   state: {
     datePickerState: null,
+    timePickerStateIsEnd: null,
     startTimePickerState: null,
     endTimePickerState: null,
     selectTagState: null,
@@ -27,12 +28,20 @@ export const store = new Vuex.Store({
     ],
     logsInfo: []
   },
+
   mutations: {
     datePickerStateChange: (state, payload) => {
       state.datePickerState = payload;
     },
     timePickerStateChange: (state, payload) => {
-      state.startTimePickerState = payload;
+      if(state.timePickerStateIsEnd) {
+        state.endTimePickerState = payload;
+      } else {
+        state.startTimePickerState = payload;
+      }
+    },
+    submitStartTime: state => {
+      state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
     },
     selectTagStateChange: (state, payload) => {
       state.selectTagState = payload;
@@ -47,14 +56,25 @@ export const store = new Vuex.Store({
       state.logsInfo.push({
         tag: state.selectTagState,
         startTime: state.startTimePickerState,
-        endTime: state.startTimePickerState,
+        endTime: state.endTimePickerState,
         date: state.datePickerState
       })
     }
   },
-  getters: {
-  },
-  actions: {
 
+  getters: {
+    // cards: state => {
+    //   return state.logsInfo.map(logInfo => {
+    //     return{
+    //       tag: logInfo.tag,
+    //       startTime: logInfo.startTime,
+    //       endTime: logInfo.endTime,
+    //       date: logInfo.date
+    //     }
+    //   })
+    // }
+  },
+
+  actions: {
   }
 })

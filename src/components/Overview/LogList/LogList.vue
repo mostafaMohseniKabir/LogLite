@@ -19,13 +19,13 @@
 
         <v-list two-line subheader>
           <v-subheader>Logs of wednesday</v-subheader>
-          <v-list-tile avatar>
+          <v-list-tile avatar v-for="logInfo in logsInfo">
             <v-list-tile-action>
               <v-checkbox v-model="notifications"></v-checkbox>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>Tag</v-list-tile-title>
-              <v-list-tile-sub-title>startTime-endTime ---- date</v-list-tile-sub-title>
+              <v-list-tile-title>{{logInfo.tag}}</v-list-tile-title>
+              <v-list-tile-sub-title>{{logInfo.startTime}} to {{logInfo.endTime}} in {{logInfo.date}}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -39,10 +39,12 @@
     data () {
       return {
         notifications: false,
-        sound: false,
-        video: false,
-        invites: false
       }
+    },
+      computed: {
+        logsInfo() {
+          return this.$store.state.logsInfo
+        }
     }
   }
 </script>
