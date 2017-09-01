@@ -15,7 +15,7 @@
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="2">
-      <app-textField></app-textField>
+      <app-logInfo></app-logInfo>
       <v-btn primary @click.native="dynamicSteppersState = 1">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
@@ -24,7 +24,7 @@
 
   <script>
   import timer from './timer.vue';
-  import textField from '../common/LogInfo.vue';
+  import LogInfo from '../common/LogInfo.vue';
   export default {
     data () {
       return {
@@ -32,7 +32,7 @@
       }
     },
     components: {
-      'app-textField': textField,
+      'app-logInfo': LogInfo,
       'app-timer': timer
     }
   }

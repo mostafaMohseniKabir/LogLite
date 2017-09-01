@@ -8,7 +8,14 @@ export const store = new Vuex.Store({
   strict: true,
   state: {
     datePickerState: null,
-    timePickerState: null
+    timePickerState: null,
+    selectTagState: null,
+    tags: [
+      { text: 'Break' },
+      { text: 'MeetLite' },
+      { text: 'TechLite' },
+      { text: 'Vue.js' }
+    ]
   },
   getters: {
 
@@ -19,6 +26,9 @@ export const store = new Vuex.Store({
     },
     timePickerStateChange: (state, payload) => {
       state.timePickerState = payload;
+    },
+    selectTagStateChange: (state, payload) => {
+      state.selectTagState = payload;
     }
   },
   actions: {

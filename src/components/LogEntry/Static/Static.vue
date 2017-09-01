@@ -35,7 +35,7 @@
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="4">
-      <app-textField></app-textField>
+      <app-logInfo></app-logInfo>
       <v-btn primary @click.native="staticSteppersState = 1">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
@@ -45,7 +45,7 @@
   <script>
   import datePicker from './datePicker.vue';
   import timePicker from './timePicker.vue';
-  import textField from '../common/LogInfo.vue';
+  import LogInfo from '../common/LogInfo.vue';
   export default {
     data () {
       return {
@@ -55,7 +55,7 @@
     components: {
       'app-datePicker': datePicker,
       'app-timePicker': timePicker,
-      'app-textField': textField
+      'app-logInfo': LogInfo
     }
   }
 </script>
