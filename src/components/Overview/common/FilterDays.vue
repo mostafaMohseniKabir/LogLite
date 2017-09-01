@@ -7,8 +7,9 @@
           </v-flex>
           <v-flex xs6>
             <v-select
-              v-bind:items="states"
-              v-model="e1"
+              :items="days"
+              :value="filterDaysState"
+              @input="filterDaysStateChange"
               label="Select"
               single-line
               auto
@@ -24,18 +25,17 @@
 
 <script>
   export default {
-    data () {
-      return {
-        e1: null,
-        states: [
-          { text: 'State 1' },
-          { text: 'State 2' },
-          { text: 'State 3' },
-          { text: 'State 4' },
-          { text: 'State 5' },
-          { text: 'State 6' },
-          { text: 'State 7' }
-        ]
+    computed: {
+      filterDaysState() {
+        return this.$store.state.filterDaysState
+      },
+      days() {
+        return this.$store.state.days
+      }
+    },
+    methods: {
+      filterDaysStateChange(payload) {
+        this.$store.commit('filterDaysStateChange', payload);
       }
     }
   }

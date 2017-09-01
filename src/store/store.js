@@ -10,6 +10,14 @@ export const store = new Vuex.Store({
     datePickerState: null,
     timePickerState: null,
     selectTagState: null,
+    filterTagsState: null,
+    filterDaysState: null,
+    days: [
+      { text: 'Sunday' },
+      { text: 'Monday' },
+      { text: 'Tuesday' },
+      { text: 'Wednesday' }
+    ],
     tags: [
       { text: 'Break' },
       { text: 'MeetLite' },
@@ -29,6 +37,12 @@ export const store = new Vuex.Store({
     },
     selectTagStateChange: (state, payload) => {
       state.selectTagState = payload;
+    },
+    filterTagsStateChange: (state, payload) => {
+      state.filterState = payload;
+    },
+    filterDaysStateChange: (state, payload) => {
+      state.filterState = payload;
     }
   },
   actions: {

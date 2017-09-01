@@ -17,8 +17,8 @@
     >
       <v-card flat xs6>
         <app-log-list>
-          <app-filter slot="filterTag"></app-filter>
-          <app-filter slot="filterDay"></app-filter>
+          <app-filter-tags slot="filterTag"></app-filter-tags>
+          <app-filter-days slot="filterDay"></app-filter-days>
         </app-log-list>
       </v-card>
     </v-tabs-content>
@@ -29,8 +29,8 @@
     >
       <v-card flat>
         <app-statistics>
-          <app-filter slot="filterTag"></app-filter>
-          <app-filter slot="filterDay"></app-filter>
+          <app-filter-tags slot="filterTag"></app-filter-tags>
+          <app-filter-days slot="filterDay"></app-filter-days>
         </app-statistics>
       </v-card>
     </v-tabs-content>
@@ -42,16 +42,14 @@
     <script>
       import Statistics from './Statistics/Statistics.vue';
       import LogList from './LogList/LogList.vue';
-      import Filter from './common/Filter.vue';
+      import FilterTags from './common/FilterTags.vue';
+      import FilterDays from './common/FilterDays.vue';
       export default {
-        data () {
-          return {
-          }
-        },
         components: {
           'app-log-list': LogList,
           'app-statistics': Statistics,
-          'app-filter': Filter
-        }
+          'app-filter-tags': FilterTags,
+          'app-filter-days': FilterDays,
+        },
       }
     </script>
