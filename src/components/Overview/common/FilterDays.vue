@@ -3,13 +3,13 @@
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
-            <v-subheader>Tag</v-subheader>
+            <v-subheader>Filter by Date</v-subheader>
           </v-flex>
           <v-flex xs6>
             <v-select
-              :items="days"
-              :value="filterDaysState"
-              @input="filterDaysStateChange"
+              :items="dates"
+              :value="filterDatesState"
+              @input="filterDatesStateChange"
               label="Select"
               single-line
               auto
@@ -26,16 +26,16 @@
 <script>
   export default {
     computed: {
-      filterDaysState() {
-        return this.$store.state.filterDaysState
+      filterDatesState() {
+        return this.$store.state.filterDatesState
       },
-      days() {
-        return this.$store.state.days
+      dates() {
+        return this.$store.state.dates
       }
     },
     methods: {
-      filterDaysStateChange(payload) {
-        this.$store.commit('filterDaysStateChange', payload);
+      filterDatesStateChange(payload) {
+        this.$store.commit('filterDatesStateChange', payload);
       }
     }
   }

@@ -19,7 +19,7 @@
 
         <v-list two-line subheader>
           <v-subheader>Logs of wednesday</v-subheader>
-          <v-list-tile avatar v-for="logInfo in logsInfo">
+          <v-list-tile avatar v-for="logInfo in filteredLogsInfo">
             <v-list-tile-action>
               <v-checkbox v-model="notifications"></v-checkbox>
             </v-list-tile-action>
@@ -44,7 +44,10 @@
       computed: {
         logsInfo() {
           return this.$store.state.logsInfo
+        },
+        filteredLogsInfo() {
+          return this.$store.getters.filteredLogsInfo
         }
+      }
     }
-  }
 </script>

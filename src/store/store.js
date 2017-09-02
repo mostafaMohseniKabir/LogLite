@@ -12,21 +12,17 @@ export const store = new Vuex.Store({
     startTimePickerState: null,
     endTimePickerState: null,
     selectTagState: null,
-    filterTagsState: null,
-    filterDaysState: null,
-    days: [
-      { text: 'Sunday' },
-      { text: 'Monday' },
-      { text: 'Tuesday' },
-      { text: 'Wednesday' }
-    ],
+    filterTagsState: {text: ""},
+    filterDatesState: {text: ""},
+    dates: [],
     tags: [
       { text: 'Break' },
       { text: 'MeetLite' },
       { text: 'TechLite' },
       { text: 'Vue.js' }
     ],
-    logsInfo: []
+    logsInfo: [],
+    filteredLogsInfo: []
   },
 
   mutations: {
@@ -43,36 +39,42 @@ export const store = new Vuex.Store({
     submitStartTime: state => {
       state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
     },
+    submitEndTime: state => {
+      state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
+    },
     selectTagStateChange: (state, payload) => {
       state.selectTagState = payload;
     },
     filterTagsStateChange: (state, payload) => {
-      state.filterState = payload;
+      state.filterTagsState = payload;
     },
-    filterDaysStateChange: (state, payload) => {
-      state.filterState = payload;
+    filterDatesStateChange: (state, payload) => {
+      state.filterDatesState = payload;
     },
-    submitLogInfo : state => {
+    submitLogInfo: state => {
       state.logsInfo.push({
         tag: state.selectTagState,
         startTime: state.startTimePickerState,
         endTime: state.endTimePickerState,
         date: state.datePickerState
-      })
+      });
+      state.dates.push({
+        text: state.datePickerState
+      });
+      state.startTimePickerState = null;
+      state.endTimePickerState = null;
     }
   },
 
   getters: {
-    // cards: state => {
-    //   return state.logsInfo.map(logInfo => {
-    //     return{
-    //       tag: logInfo.tag,
-    //       startTime: logInfo.startTime,
-    //       endTime: logInfo.endTime,
-    //       date: logInfo.date
-    //     }
-    //   })
-    // }
+    filteredLogsInfo: state => {
+      var filteredLogsInfoByTag = state.logsInfo.filter((logInfo) => {
+        return logInfo.tag.match(state.filterTagsState.text)
+      })
+      return filteredLogsInfoByTag.filter((filteredLogInfoByTag) => {
+        return filteredLogInfoByTag.date.match(state.filterDatesState.text)
+      })
+    }
   },
 
   actions: {

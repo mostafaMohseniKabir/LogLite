@@ -3,7 +3,7 @@
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
-            <v-subheader>Day</v-subheader>
+            <v-subheader>Filter by Tag</v-subheader>
           </v-flex>
           <v-flex xs6>
             <v-select

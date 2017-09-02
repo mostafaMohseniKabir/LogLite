@@ -16,7 +16,7 @@
     </v-stepper-step>
     <v-stepper-content step="2">
       <app-timePicker></app-timePicker>
-      <v-btn primary @click.native="staticSteppersState = 3">Continue</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 3" @click="submitEndTime">Continue</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
@@ -60,6 +60,9 @@
     methods: {
       submitStartTime() {
         this.$store.commit('submitStartTime');
+      },
+      submitEndTime() {
+        this.$store.commit('submitEndTime');
       },
       submitLogInfo() {
         this.$store.commit('submitLogInfo');
