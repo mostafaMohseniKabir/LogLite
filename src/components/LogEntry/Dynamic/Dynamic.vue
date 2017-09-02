@@ -15,25 +15,35 @@
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="2">
+
       <app-logInfo></app-logInfo>
-      <v-btn primary @click.native="dynamicSteppersState = 1">Finish</v-btn>
+      <app-submit-snackbar></app-submit-snackbar>
+
+      <v-btn primary @click.native="dynamicSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
 
-  <script>
-  import timer from './timer.vue';
-  import LogInfo from '../common/LogInfo.vue';
-  export default {
-    data () {
-      return {
-        dynamicSteppersState: 1
-      }
-    },
-    components: {
-      'app-logInfo': LogInfo,
-      'app-timer': timer
+<script>
+import timer from './timer.vue';
+import LogInfo from '../common/LogInfo.vue';
+import SubmitSnackbar from '../common/SubmitSnackbar.vue';
+export default {
+  data () {
+    return {
+      dynamicSteppersState: 1
+    }
+  },
+  components: {
+    'app-logInfo': LogInfo,
+    'app-timer': timer,
+    'app-submit-snackbar': SubmitSnackbar
+  },
+  methods: {
+    submitLogInfo(payload) {
+      this.$store.commit('snackbarStateChange', payload);
     }
   }
+}
 </script>

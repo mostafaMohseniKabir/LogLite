@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
     startTimePickerState: null,
     endTimePickerState: null,
     selectTagState: null,
+    snackbarState: false,
     filterTagsState: {text: ""},
     filterDatesState: {text: ""},
     dates: [],
@@ -51,6 +52,9 @@ export const store = new Vuex.Store({
     },
     selectTagStateChange: (state, payload) => {
       state.selectTagState = payload;
+    },
+    snackbarStateChange: (state, payload) => {
+      state.snackbarState = payload;
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;

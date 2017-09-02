@@ -35,38 +35,44 @@
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="4">
+
       <app-logInfo></app-logInfo>
-      <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo">Finish</v-btn>
+      <app-submit-snackbar></app-submit-snackbar>
+      
+      <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
 
-  <script>
-  import datePicker from './datePicker.vue';
-  import timePicker from './timePicker.vue';
-  import LogInfo from '../common/LogInfo.vue';
-  export default {
-    data () {
-      return {
-        staticSteppersState: 1
-      }
+<script>
+import datePicker from './datePicker.vue';
+import timePicker from './timePicker.vue';
+import LogInfo from '../common/LogInfo.vue';
+import SubmitSnackbar from '../common/SubmitSnackbar.vue';
+export default {
+  data () {
+    return {
+      staticSteppersState: 1
+    }
+  },
+  components: {
+    'app-datePicker': datePicker,
+    'app-timePicker': timePicker,
+    'app-logInfo': LogInfo,
+    'app-submit-snackbar': SubmitSnackbar
+  },
+  methods: {
+    submitStartTime() {
+      this.$store.commit('submitStartTime');
     },
-    components: {
-      'app-datePicker': datePicker,
-      'app-timePicker': timePicker,
-      'app-logInfo': LogInfo
+    submitEndTime() {
+      this.$store.commit('submitEndTime');
     },
-    methods: {
-      submitStartTime() {
-        this.$store.commit('submitStartTime');
-      },
-      submitEndTime() {
-        this.$store.commit('submitEndTime');
-      },
-      submitLogInfo() {
-        this.$store.commit('submitLogInfo');
-      }
+    submitLogInfo(payload) {
+      this.$store.commit('submitLogInfo');
+      this.$store.commit('snackbarStateChange', payload);
     }
   }
+}
 </script>
