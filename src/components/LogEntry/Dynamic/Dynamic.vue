@@ -5,7 +5,7 @@
       <small>Push the start button to start counting!</small>
     </v-stepper-step>
     <v-stepper-content step="1">
-      <app-timer></app-timer>
+      <!-- <app-timer></app-timer> -->
       <v-btn primary @click.native="dynamicSteppersState = 2">Continue</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>

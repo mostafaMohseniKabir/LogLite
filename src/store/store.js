@@ -15,7 +15,14 @@ export const store = new Vuex.Store({
     filterTagsState: {text: ""},
     filterDatesState: {text: ""},
     dates: [],
-    tags: [
+    tagsInEntry: [
+      { text: 'Break' },
+      { text: 'MeetLite' },
+      { text: 'TechLite' },
+      { text: 'Vue.js' }
+    ],
+    tagsInOverview: [
+      { text: 'All'},
       { text: 'Break' },
       { text: 'MeetLite' },
       { text: 'TechLite' },
@@ -58,24 +65,38 @@ export const store = new Vuex.Store({
         endTime: state.endTimePickerState,
         date: state.datePickerState
       });
-      state.dates.push({
-        text: state.datePickerState
-      });
-      state.startTimePickerState = null;
-      state.endTimePickerState = null;
+
+      var flag = false;
+      for(var i=0, len=state.dates.length; i<len; i++) {
+        if( (state.dates)[i].text === state.datePickerState ) {
+          flag = true;
+          break;
+        }
+      }
+      if(!flag){
+        state.dates.push({
+          text: state.datePickerState
+        });
+      }
+
+      state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
+      state.endTimePickerState = null;  //set next endTime to null
     }
   },
 
   getters: {
     filteredLogsInfo: state => {
-      var filteredLogsInfoByTag = state.logsInfo.filter((logInfo) => {
-        return logInfo.tag.match(state.filterTagsState.text)
-      })
-      return filteredLogsInfoByTag.filter((filteredLogInfoByTag) => {
-        return filteredLogInfoByTag.date.match(state.filterDatesState.text)
-      })
-    }
-  },
+      return state.logsInfo.filter((logInfo) => {
+        if(state.filterTagsState.text.match('All')){
+          return true
+        }
+          return logInfo.tag.match(state.filterTagsState.text)
+        })
+        .filter((filteredLogInfoByTag) => {
+          return filteredLogInfoByTag.date.match(state.filterDatesState.text)
+        })
+      }
+    },
 
   actions: {
   }

@@ -7,7 +7,7 @@
         </v-toolbar>
 
         <v-layout>
-          <v-flex>
+          <v-flex >
             <slot name="filterTag"></slot>
           </v-flex>
           <v-flex>
@@ -18,7 +18,7 @@
         <v-divider></v-divider>
 
         <v-list two-line subheader>
-          <v-subheader>Logs of wednesday</v-subheader>
+          <v-subheader>Logs Informaton</v-subheader>
           <v-list-tile avatar v-for="logInfo in filteredLogsInfo">
             <v-list-tile-action>
               <v-checkbox v-model="notifications"></v-checkbox>
@@ -42,9 +42,6 @@
       }
     },
       computed: {
-        logsInfo() {
-          return this.$store.state.logsInfo
-        },
         filteredLogsInfo() {
           return this.$store.getters.filteredLogsInfo
         }

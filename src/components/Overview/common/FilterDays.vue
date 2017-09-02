@@ -5,16 +5,17 @@
           <v-flex xs6>
             <v-subheader>Filter by Date</v-subheader>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs12 sm6>
             <v-select
               :items="dates"
               :value="filterDatesState"
               @input="filterDatesStateChange"
               label="Select"
-              single-line
-              auto
               append-icon="map"
-              hide-details
+              max-height="400"
+              hint="Pick any dates you want!"
+              persistent-hint
+              autocomplete
             ></v-select>
           </v-flex>
       </v-container>

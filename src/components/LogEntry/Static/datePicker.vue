@@ -2,7 +2,6 @@
   <v-layout row wrap>
     <v-flex md12 lg4 id='datePicker'>
       <v-date-picker :value="datePickerState" @input="datePickerStateChange" actions dark></v-date-picker>
-      <p>{{datePickerState}}</p>
     </v-flex>
   </v-layout>
 </template>

@@ -3,18 +3,19 @@
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
-            <v-subheader>Filter by Tag</v-subheader>
+            <v-subheader>Filter by Tags</v-subheader>
           </v-flex>
           <v-flex xs6>
             <v-select
-              :items="tags"
+              :items="tagsInOverview"
               :value="filterTagsState"
               @input="filterTagsStateChange"
               label="Select"
-              single-line
-              auto
               append-icon="map"
-              hide-details
+              max-height="400"
+              hint="Pick any tag you want!"
+              persistent-hint
+              autocomplete
             ></v-select>
           </v-flex>
       </v-container>
@@ -29,8 +30,8 @@
       filterTagsState() {
         return this.$store.state.filterTagsState
       },
-      tags() {
-        return this.$store.state.tags
+      tagsInOverview() {
+        return this.$store.state.tagsInOverview
       }
     },
     methods: {

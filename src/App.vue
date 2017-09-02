@@ -19,7 +19,7 @@
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
-            <router-link :to=item.link>
+            <router-link :to="item.link">
             <v-list-tile-content>
               <v-list-tile-title>
                 {{ item.text }}
@@ -33,7 +33,6 @@
     <v-toolbar class="red">
       <v-toolbar-title>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-icon class="ml-3">youtube</v-icon>
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>

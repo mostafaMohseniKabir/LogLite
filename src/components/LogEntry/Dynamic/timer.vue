@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="iCountUp">
     <i-count-up
       :start="0"
@@ -53,4 +53,4 @@
     margin: 0;
     color: #00BCD4;
   }
-</style>
+</style> -->
