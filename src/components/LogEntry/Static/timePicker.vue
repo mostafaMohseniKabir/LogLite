@@ -30,6 +30,6 @@
 
 <style media="screen">
   #timePicker {
-    overflow: scroll;
+    overflow: ;
   }
 </style>

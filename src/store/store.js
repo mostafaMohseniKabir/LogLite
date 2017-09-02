@@ -93,8 +93,9 @@ export const store = new Vuex.Store({
       return state.logsInfo.filter((logInfo) => {
         if(state.filterTagsState.text.match('All')){
           return true
-        }
+        } else if(logInfo.tag) {  //checks if tag isn't selected by user
           return logInfo.tag.match(state.filterTagsState.text)
+        }
         })
         .filter((filteredLogInfoByTag) => {
           return filteredLogInfoByTag.date.match(state.filterDatesState.text)

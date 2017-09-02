@@ -7,7 +7,6 @@
     <v-stepper-content step="1">
       <app-timePicker></app-timePicker>
       <v-btn primary @click.native="staticSteppersState = 2" @click="submitStartTime">Continue</v-btn>
-      <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
     <v-stepper-step step="2" v-bind:complete="staticSteppersState > 2">
@@ -17,7 +16,7 @@
     <v-stepper-content step="2">
       <app-timePicker></app-timePicker>
       <v-btn primary @click.native="staticSteppersState = 3" @click="submitEndTime">Continue</v-btn>
-      <v-btn flat>Cancel</v-btn>
+      <v-btn flat @click.native="staticSteppersState = 1" @click="submitEndTime">Previous</v-btn>
     </v-stepper-content>
 
     <v-stepper-step step="3" v-bind:complete="staticSteppersState > 3">
@@ -27,7 +26,7 @@
     <v-stepper-content step="3">
       <app-datePicker></app-datePicker>
       <v-btn primary @click.native="staticSteppersState = 4">Continue</v-btn>
-      <v-btn flat>Cancel</v-btn>
+      <v-btn flat @click.native="staticSteppersState =2" @click="submitEndTime">Previous</v-btn>
     </v-stepper-content>
 
     <v-stepper-step step="4" v-bind:complete="staticSteppersState > 4">
@@ -38,9 +37,9 @@
 
       <app-logInfo></app-logInfo>
       <app-submit-snackbar></app-submit-snackbar>
-      
+
       <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
-      <v-btn flat>Cancel</v-btn>
+      <v-btn flat @click.native="staticSteppersState = 3">Previous</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>

@@ -7,7 +7,6 @@
     <v-stepper-content step="1">
       <!-- <app-timer></app-timer> -->
       <v-btn primary @click.native="dynamicSteppersState = 2">Continue</v-btn>
-      <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
     <v-stepper-step step="2" v-bind:complete="dynamicSteppersState > 2">
@@ -20,7 +19,7 @@
       <app-submit-snackbar></app-submit-snackbar>
 
       <v-btn primary @click.native="dynamicSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
-      <v-btn flat>Cancel</v-btn>
+      <v-btn flat @click.native="dynamicSteppersState = 1">Previous</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>

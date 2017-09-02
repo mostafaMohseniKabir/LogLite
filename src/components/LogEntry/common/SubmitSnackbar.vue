@@ -1,6 +1,6 @@
 <template>
   <v-snackbar
-    :error="error='true'"
+    :error=true
     :value="snackbarState"
     @input="snackbarStateChange"
   >

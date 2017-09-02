@@ -24,6 +24,6 @@
 
 <style media="screen">
   #datePicker {
-    overflow: scroll;
+    overflow: ;
   }
 </style>
