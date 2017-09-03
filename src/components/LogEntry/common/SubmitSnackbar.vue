@@ -13,7 +13,7 @@
   export default {
     data () {
       return {
-        timeout: 2500,
+        timeout: 500,
         text: 'Log Infornation is submitted successfully!'
       }
     },

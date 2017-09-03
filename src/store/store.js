@@ -30,7 +30,8 @@ export const store = new Vuex.Store({
       { text: 'Vue.js' }
     ],
     logsInfo: [],
-    filteredLogsInfo: []
+    filteredLogsInfo: [],
+    notification: true
   },
 
   mutations: {
@@ -56,6 +57,13 @@ export const store = new Vuex.Store({
     snackbarStateChange: (state, payload) => {
       state.snackbarState = payload;
     },
+    checkboxStateChange: (state, payload) => {
+      state.notification = payload;
+    },
+    deleteLogInfo: (state, payload) => {
+      state.logsInfo.splice(payload,1);
+      state.dates.splice(payload,1)
+    },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
     },
@@ -67,11 +75,11 @@ export const store = new Vuex.Store({
         tag: state.selectTagState,
         startTime: state.startTimePickerState,
         endTime: state.endTimePickerState,
-        date: state.datePickerState
+        date: state.datePickerState,
+        // select: false
       });
-
       var flag = false;
-      for(var i=0, len=state.dates.length; i<len; i++) {
+      for(var i=0, len=state.dates.length; i<len; i++) {  //avoid to add repeatitive date
         if( (state.dates)[i].text === state.datePickerState ) {
           flag = true;
           break;

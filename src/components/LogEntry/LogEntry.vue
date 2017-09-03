@@ -4,11 +4,11 @@
       <v-tabs-slider class="yellow"></v-tabs-slider>
       <v-tabs-item href="#tab-1">
         <v-icon>watch</v-icon>
-        Dynamic
+        Static
       </v-tabs-item>
       <v-tabs-item href="#tab-2">
         <v-icon>watch_later</v-icon>
-        Static
+        Dynamic
       </v-tabs-item>
     </v-tabs-bar>
     <v-tabs-content
@@ -16,7 +16,7 @@
       :id="'tab-' + 1"
     >
       <v-card flat>
-        <app-dynamic></app-dynamic>
+        <app-static></app-static>
       </v-card>
     </v-tabs-content>
 
@@ -25,7 +25,7 @@
       :id="'tab-' + 2"
     >
       <v-card flat>
-        <app-static></app-static>
+        <app-dynamic></app-dynamic>
       </v-card>
     </v-tabs-content>
 

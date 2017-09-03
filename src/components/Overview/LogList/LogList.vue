@@ -19,9 +19,11 @@
 
         <v-list two-line subheader>
           <v-subheader>Logs Informaton</v-subheader>
-          <v-list-tile avatar v-for="logInfo in filteredLogsInfo">
+          <v-list-tile avatar v-for="(logInfo,index) in filteredLogsInfo">
             <v-list-tile-action>
-              <v-checkbox v-model="notifications"></v-checkbox>
+              <v-btn small outline fab class="grey" @click='deleteLogInfo(index)'>
+                <v-icon>delete</v-icon>
+              </v-btn>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{logInfo.tag}}</v-list-tile-title>
@@ -36,15 +38,24 @@
 
 <script>
   export default {
-    data () {
-      return {
-        notifications: false,
-      }
-    },
       computed: {
+        notification() {
+          return this.$store.state.notification
+        },
+        // checkboxes() {
+        //   return this.$store.state.checkboxes
+        // },
         filteredLogsInfo() {
           return this.$store.getters.filteredLogsInfo
         }
-      }
+      },
+      methods: {
+        checkboxStateChange(payload) {
+          this.$store.commit('checkboxStateChange', payload);
+        },
+        deleteLogInfo(payload) {
+          this.$store.commit('deleteLogInfo', payload);
+        }
     }
+  }
 </script>
