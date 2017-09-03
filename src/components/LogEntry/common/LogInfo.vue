@@ -4,24 +4,25 @@
       <v-container fluid>
         <v-layout row wrap>
           <v-flex xs12>
-
-            <!-- <v-text-field
-              name="input-2"
-              label="Label Text"
-              value="Input text"
-              class="input-group--focused"
-              dark
-            ></v-text-field> -->
-
-            <v-select
-              label="Select"
-              v-bind:items="tagsInEntry"
-              :value="selectTagState" @input="selectTagStateChange"
-              v-bind:rules="[() => selectTagState && selectTagState.text && selectTagState.text.length > 0 || 'Please select a tag']"
-              item-value="text"
-              autocomplete
+            <v-menu offset-x
+            transition="slide-x-transition"
+            bottom
+            right
             >
-          </v-select>
+              <v-text-field
+                append-icon="label"
+                name="input"
+                :value="inputTagState" @input="inputTagStateChange"
+                label="Your favorite tag!"
+                dark
+                slot="activator"
+              ></v-text-field>
+              <v-list>
+                <v-list-tile v-for="tag in tagsInEntry" :key="tag.text" @click="chooseTagFromMenu(tag.text)">
+                  <v-list-tile-title>{{ tag.text }}</v-list-tile-title>
+              </v-list-tile>
+              </v-list>
+            </v-menu>
           </v-flex>
         </v-layout>
       </v-container>
@@ -32,16 +33,19 @@
 <script>
   export default {
     computed: {
-      selectTagState() {
-        return this.$store.state.selectTagState
+      inputTagState() {
+        return this.$store.state.inputTagState
       },
       tagsInEntry() {
         return this.$store.state.tagsInEntry
       }
     },
     methods: {
-      selectTagStateChange(payload) {
-        this.$store.commit('selectTagStateChange', payload);
+      chooseTagFromMenu(payload) {
+        this.$store.commit('chooseTagFromMenu', payload);
+      },
+      inputTagStateChange(payload) {
+        this.$store.commit('inputTagStateChange', payload);
       }
     }
   }

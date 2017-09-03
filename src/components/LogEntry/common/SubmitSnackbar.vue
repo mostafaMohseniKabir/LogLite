@@ -1,6 +1,7 @@
 <template>
   <v-snackbar
-    :error=true
+    :timeout="timeout"
+    :success=true
     :value="snackbarState"
     @input="snackbarStateChange"
   >
@@ -13,7 +14,7 @@
   export default {
     data () {
       return {
-        timeout: 500,
+        timeout: 2000,
         text: 'Log Infornation is submitted successfully!'
       }
     },

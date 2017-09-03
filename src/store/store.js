@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
     timePickerStateIsEnd: null,
     startTimePickerState: null,
     endTimePickerState: null,
-    selectTagState: null,
+    inputTagState: null,
     snackbarState: false,
     filterTagsState: {text: ""},
     filterDatesState: {text: ""},
@@ -51,14 +51,14 @@ export const store = new Vuex.Store({
     submitEndTime: state => {
       state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
     },
-    selectTagStateChange: (state, payload) => {
-      state.selectTagState = payload;
+    inputTagStateChange: (state, payload) => {
+      state.inputTagState = payload;
     },
     snackbarStateChange: (state, payload) => {
       state.snackbarState = payload;
     },
-    checkboxStateChange: (state, payload) => {
-      state.notification = payload;
+    chooseTagFromMenu: (state, payload) => {
+      state.inputTagState = payload;
     },
     deleteLogInfo: (state, payload) => {
       state.logsInfo.splice(payload,1);
@@ -72,23 +72,41 @@ export const store = new Vuex.Store({
     },
     submitLogInfo: state => {
       state.logsInfo.push({
-        tag: state.selectTagState,
+        tag: state.inputTagState,
         startTime: state.startTimePickerState,
         endTime: state.endTimePickerState,
         date: state.datePickerState,
-        // select: false
       });
-      var flag = false;
-      for(var i=0, len=state.dates.length; i<len; i++) {  //avoid to add repeatitive date
-        if( (state.dates)[i].text === state.datePickerState ) {
-          flag = true;
+
+      //avoid to add repeatitive tags
+      var tagFlag = false;
+      for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
+        if( (state.tagsInEntry)[i].text === state.inputTagState ) {
+          tagFlag = true;
           break;
         }
       }
-      if(!flag){
-        state.dates.push({
-          text: state.datePickerState
+      if(!tagFlag){
+        state.tagsInEntry.push({
+          text: state.inputTagState
         });
+        state.tagsInOverview.push({
+          text: state.inputTagState
+        });
+      }
+
+        //avoid to add repeatitive dates
+        var dateFlag = false;
+        for(var i=0, len=state.dates.length; i<len; i++) {
+          if( (state.dates)[i].text === state.datePickerState ) {
+            dateFlag = true;
+            break;
+          }
+        }
+        if(!dateFlag){
+          state.dates.push({
+            text: state.datePickerState
+          });
       }
 
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
@@ -98,14 +116,14 @@ export const store = new Vuex.Store({
 
   getters: {
     filteredLogsInfo: state => {
-      return state.logsInfo.filter((logInfo) => {
+      return state.logsInfo.filter((logInfo) => {   //filter by tags
         if(state.filterTagsState.text.match('All')){
           return true
         } else if(logInfo.tag) {  //checks if tag isn't selected by user
           return logInfo.tag.match(state.filterTagsState.text)
         }
         })
-        .filter((filteredLogInfoByTag) => {
+        .filter((filteredLogInfoByTag) => {   //filter by dates
           return filteredLogInfoByTag.date.match(state.filterDatesState.text)
         })
       }
