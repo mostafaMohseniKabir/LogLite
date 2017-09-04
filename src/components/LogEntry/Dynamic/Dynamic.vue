@@ -18,7 +18,7 @@
       <app-logInfo></app-logInfo>
       <app-submit-snackbar></app-submit-snackbar>
 
-      <v-btn primary @click.native="dynamicSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
+      <v-btn  v-tooltip:bottom="{ html: 'Top tooltip' }" primary @click.native="dynamicSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
       <v-btn flat @click.native="dynamicSteppersState = 1">Previous</v-btn>
     </v-stepper-content>
   </v-stepper>
