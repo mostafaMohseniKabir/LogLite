@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+const R = require('ramda');
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -18,20 +18,15 @@ export const store = new Vuex.Store({
     dates: [],
     tagsInEntry: [
       { text: 'Break' },
-      { text: 'MeetLite' },
-      { text: 'TechLite' },
       { text: 'Vue.js' }
     ],
     tagsInOverview: [
       { text: 'All'},
       { text: 'Break' },
-      { text: 'MeetLite' },
-      { text: 'TechLite' },
       { text: 'Vue.js' }
     ],
     logsInfo: [],
-    filteredLogsInfo: [],
-    notification: true
+    filteredLogsInfo: []
   },
 
   mutations: {
@@ -61,8 +56,41 @@ export const store = new Vuex.Store({
       state.inputTagState = payload;
     },
     deleteLogInfo: (state, payload) => {
+
+      //tag and date are stored before deleting them
+      var tagOfDeletedLog = state.logsInfo[payload].tag;
+      var dateOfDeletedLog = state.logsInfo[payload].date;
+
+      //delete logsInfo
       state.logsInfo.splice(payload,1);
-      state.dates.splice(payload,1)
+
+      //avoid to delete repeatitive tags
+      var tagFlag = false;
+      for(var i=0, len=state.logsInfo.length; i<len; i++) {
+        if( state.logsInfo[i].tag === tagOfDeletedLog ) {
+          tagFlag = true;
+          break;
+        }
+      }
+      if(!tagFlag){
+        ;
+        state.tagsInOverview.splice(R.findIndex(R.propEq('text', tagOfDeletedLog))(state.tagsInOverview),1);
+      }
+      //avoid to delete repeatitive tags
+
+      //avoid to delete repeatitive dates
+      var dateFlag = false;
+      for(var i=0, len=state.logsInfo.length; i<len; i++) {
+        if( state.logsInfo[i].date === dateOfDeletedLog ) {
+          dateFlag = true;
+          break;
+        }
+      }
+      if(!dateFlag){
+        state.dates.splice(R.findIndex(R.propEq('text', dateOfDeletedLog))(state.dates),1);
+        };
+      //avoid to delete repeatitive dates
+
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -80,8 +108,8 @@ export const store = new Vuex.Store({
 
       //avoid to add repeatitive tags
       var tagFlag = false;
-      for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
-        if( (state.tagsInEntry)[i].text === state.inputTagState ) {
+      for(var i=0, len=state.tagsInOverview.length; i<len; i++) {
+        if( (state.tagsInOverview)[i].text === state.inputTagState ) {
           tagFlag = true;
           break;
         }
