@@ -7,22 +7,20 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex';
+  import {mapMutations} from 'vuex';
   export default {
     computed: {
-      startTimePickerState() {
-        return this.$store.state.startTimePickerState
-      },
-      endTimePickerState() {
-        return this.$store.state.endTimePickerState
-      },
-      timePickerStateIsEnd() {
-        return this.$store.state.timePickerStateIsEnd
-      }
+      ...mapState([
+        'startTimePickerState',
+        'endTimePickerState',
+        'timePickerStateIsEnd'
+      ])
     },
     methods: {
-      timePickerStateChange(payload) {
-        this.$store.commit('timePickerStateChange', payload);
-      }
+      ...mapMutations([
+        'timePickerStateChange'
+      ])
     }
   }
 </script>

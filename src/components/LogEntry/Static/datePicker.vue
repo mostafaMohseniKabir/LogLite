@@ -7,18 +7,20 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      datePickerState() {
-        return this.$store.state.datePickerState
-      }
-    },
-    methods: {
-      datePickerStateChange(payload) {
-        this.$store.commit('datePickerStateChange', payload);
-      }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  computed: {
+    ...mapState([
+      'datePickerState'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'datePickerStateChange'
+    ])
     }
-  }
+}
 </script>
 
 

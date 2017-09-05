@@ -25,19 +25,19 @@
 
 
 <script>
-  export default {
-    computed: {
-      filterTagsState() {
-        return this.$store.state.filterTagsState
-      },
-      tagsInOverview() {
-        return this.$store.state.tagsInOverview
-      }
-    },
-    methods: {
-      filterTagsStateChange(payload) {
-        this.$store.commit('filterTagsStateChange', payload);
-      }
-    }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  computed: {
+    ...mapState([
+      'filterTagsState',
+      'tagsInOverview'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'filterTagsStateChange'
+    ])
   }
+}
 </script>

@@ -11,22 +11,24 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        timeout: 2000,
-        text: 'Log Infornation is submitted successfully!'
-      }
-    },
-    computed: {
-      snackbarState() {
-        return this.$store.state.snackbarState
-      }
-    },
-    methods: {
-      snackbarStateChange(payload) {
-        this.$store.commit('snackbarStateChange', payload);
-      }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  data () {
+    return {
+      timeout: 2000,
+      text: 'Log Infornation is submitted successfully!'
     }
+  },
+  computed: {
+    ...mapState([
+      'snackbarState'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'snackbarStateChange'
+    ])
   }
+}
 </script>

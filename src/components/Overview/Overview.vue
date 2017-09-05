@@ -49,7 +49,7 @@
           'app-log-list': LogList,
           'app-statistics': Statistics,
           'app-filter-tags': FilterTags,
-          'app-filter-days': FilterDays,
+          'app-filter-days': FilterDays
         },
       }
     </script>

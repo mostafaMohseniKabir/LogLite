@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-const R = require('ramda');
 Vue.use(Vuex);
+const R = require('ramda');
+var moment = require('moment');
+moment().format();
 
 export const store = new Vuex.Store({
   debug: true,
@@ -11,6 +13,8 @@ export const store = new Vuex.Store({
     timePickerStateIsEnd: null,
     startTimePickerState: null,
     endTimePickerState: null,
+    durationState: null,
+    totalDuration: null,
     inputTagState: null,
     snackbarState: false,
     filterTagsState: {text: ""},
@@ -76,7 +80,6 @@ export const store = new Vuex.Store({
         ;
         state.tagsInOverview.splice(R.findIndex(R.propEq('text', tagOfDeletedLog))(state.tagsInOverview),1);
       }
-      //avoid to delete repeatitive tags
 
       //avoid to delete repeatitive dates
       var dateFlag = false;
@@ -89,8 +92,6 @@ export const store = new Vuex.Store({
       if(!dateFlag){
         state.dates.splice(R.findIndex(R.propEq('text', dateOfDeletedLog))(state.dates),1);
         };
-      //avoid to delete repeatitive dates
-
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -99,11 +100,16 @@ export const store = new Vuex.Store({
       state.filterDatesState = payload;
     },
     submitLogInfo: state => {
+
+      // calculation of duration
+      state.durationState = moment(state.datePickerState + "T" + state.startTimePickerState).diff(moment(state.datePickerState + "T" + state.endTimePickerState));
+
       state.logsInfo.push({
-        tag: state.inputTagState,
-        startTime: state.startTimePickerState,
-        endTime: state.endTimePickerState,
-        date: state.datePickerState,
+          tag: state.inputTagState,
+          startTime: state.startTimePickerState,
+          endTime: state.endTimePickerState,
+          date: state.datePickerState,
+          duration: state.durationState
       });
 
       //avoid to add repeatitive tags
@@ -137,8 +143,18 @@ export const store = new Vuex.Store({
           });
       }
 
+
+
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
       state.endTimePickerState = null;  //set next endTime to null
+
+
+    },
+    totalDuration: (state,getters) => {
+      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
+        state.totalDuration += getters.filteredLogsInfo[i].duration;
+      }
+      return moment.duration(state.totalDuration, "ms").humanize();
     }
   },
 

@@ -34,22 +34,20 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      inputTagState() {
-        return this.$store.state.inputTagState
-      },
-      tagsInEntry() {
-        return this.$store.state.tagsInEntry
-      }
-    },
-    methods: {
-      chooseTagFromMenu(payload) {
-        this.$store.commit('chooseTagFromMenu', payload);
-      },
-      inputTagStateChange(payload) {
-        this.$store.commit('inputTagStateChange', payload);
-      }
-    }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  computed: {
+    ...mapState([
+      'inputTagState',
+      'tagsInEntry'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'chooseTagFromMenu',
+      'inputTagStateChange'
+    ])
   }
+}
 </script>

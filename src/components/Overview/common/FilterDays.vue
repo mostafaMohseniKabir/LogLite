@@ -25,19 +25,19 @@
 
 
 <script>
-  export default {
-    computed: {
-      filterDatesState() {
-        return this.$store.state.filterDatesState
-      },
-      dates() {
-        return this.$store.state.dates
-      }
-    },
-    methods: {
-      filterDatesStateChange(payload) {
-        this.$store.commit('filterDatesStateChange', payload);
-      }
-    }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  computed: {
+    ...mapState([
+      'filterDatesState',
+      'dates'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'filterDatesStateChange'
+    ])
   }
+}
 </script>

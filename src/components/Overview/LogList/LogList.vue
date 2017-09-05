@@ -32,30 +32,29 @@
           </v-list-tile>
         </v-list>
 
+        <app-calculator></app-calculator>
+
       </v-card>
 </template>
 
 
 <script>
+  import Calculator  from './Calculator.vue';
+  import {mapGetters} from 'vuex';
+  import {mapMutations} from 'vuex';
   export default {
+      components: {
+        'app-calculator': Calculator
+      },
       computed: {
-        notification() {
-          return this.$store.state.notification
-        },
-        // checkboxes() {
-        //   return this.$store.state.checkboxes
-        // },
-        filteredLogsInfo() {
-          return this.$store.getters.filteredLogsInfo
-        }
+        ...mapGetters([
+          'filteredLogsInfo'
+        ])
       },
       methods: {
-        checkboxStateChange(payload) {
-          this.$store.commit('checkboxStateChange', payload);
-        },
-        deleteLogInfo(payload) {
-          this.$store.commit('deleteLogInfo', payload);
-        }
+        ...mapMutations([
+          'deleteLogInfo'
+        ])
     }
   }
 </script>
