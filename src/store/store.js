@@ -14,7 +14,6 @@ export const store = new Vuex.Store({
     startTimePickerState: null,
     endTimePickerState: null,
     durationState: null,
-    totalDuration: null,
     inputTagState: null,
     snackbarState: false,
     filterTagsState: {text: ""},
@@ -99,10 +98,12 @@ export const store = new Vuex.Store({
     filterDatesStateChange: (state, payload) => {
       state.filterDatesState = payload;
     },
-    submitLogInfo: state => {
+    submitLogInfo: (state, payload) => {
+      // snackbar is opened
+      state.snackbarState = payload;
 
       // calculation of duration
-      state.durationState = moment(state.datePickerState + "T" + state.startTimePickerState).diff(moment(state.datePickerState + "T" + state.endTimePickerState));
+      state.durationState = moment(state.datePickerState + "T" + state.endTimePickerState).diff(moment(state.datePickerState + "T" + state.startTimePickerState));
 
       state.logsInfo.push({
           tag: state.inputTagState,
@@ -149,12 +150,6 @@ export const store = new Vuex.Store({
       state.endTimePickerState = null;  //set next endTime to null
 
 
-    },
-    totalDuration: (state,getters) => {
-      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
-        state.totalDuration += getters.filteredLogsInfo[i].duration;
-      }
-      return moment.duration(state.totalDuration, "ms").humanize();
     }
   },
 
@@ -170,7 +165,14 @@ export const store = new Vuex.Store({
         .filter((filteredLogInfoByTag) => {   //filter by dates
           return filteredLogInfoByTag.date.match(state.filterDatesState.text)
         })
-      }
+      },
+      totalDuration: (state, getters) => {
+        var total = 0;
+        for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
+          total += getters.filteredLogsInfo[i].duration;
+        }
+        return moment.duration(total, "ms").humanize();
+        }
     },
 
   actions: {

@@ -7,22 +7,22 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import {mapMutations} from 'vuex';
-  export default {
-    computed: {
-      ...mapState([
-        'startTimePickerState',
-        'endTimePickerState',
-        'timePickerStateIsEnd'
-      ])
-    },
-    methods: {
-      ...mapMutations([
-        'timePickerStateChange'
-      ])
-    }
+import {mapState} from 'vuex';
+import {mapMutations} from 'vuex';
+export default {
+  computed: {
+    ...mapState([
+      'startTimePickerState',
+      'endTimePickerState',
+      'timePickerStateIsEnd'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'timePickerStateChange'
+    ])
   }
+}
 </script>
 
 

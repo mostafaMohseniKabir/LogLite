@@ -49,6 +49,7 @@ import datePicker from './datePicker.vue';
 import timePicker from './timePicker.vue';
 import LogInfo from '../common/LogInfo.vue';
 import SubmitSnackbar from '../common/SubmitSnackbar.vue';
+import {mapMutations} from 'vuex';
 export default {
   data () {
     return {
@@ -62,16 +63,11 @@ export default {
     'app-submit-snackbar': SubmitSnackbar
   },
   methods: {
-    submitStartTime() {
-      this.$store.commit('submitStartTime');
-    },
-    submitEndTime() {
-      this.$store.commit('submitEndTime');
-    },
-    submitLogInfo(payload) {
-      this.$store.commit('submitLogInfo');
-      this.$store.commit('snackbarStateChange', payload);
-    }
+    ...mapMutations([
+      'submitStartTime',
+      'submitEndTime',
+      'submitLogInfo'
+    ])
   }
 }
 </script>
