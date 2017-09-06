@@ -11,7 +11,7 @@
               :value="filterDatesState"
               @input="filterDatesStateChange"
               label="Select"
-              append-icon="map"
+              append-icon="filter_list"
               max-height="400"
               hint="Pick any dates you want!"
               persistent-hint

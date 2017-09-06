@@ -61,11 +61,12 @@ export const store = new Vuex.Store({
     deleteLogInfo: (state, payload) => {
 
       //tag and date are stored before deleting them
-      var tagOfDeletedLog = state.logsInfo[payload].tag;
-      var dateOfDeletedLog = state.logsInfo[payload].date;
+      var startTimeOfDeletedLog = payload.startTime;
+      var tagOfDeletedLog = payload.tag;
+      var dateOfDeletedLog = payload.date;
 
       //delete logsInfo
-      state.logsInfo.splice(payload,1);
+      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('text', startTimeOfDeletedLog, logInfo) && R.propEq('text', dateOfDeletedLog, logInfo))(state.logsInfo),1);
 
       //avoid to delete repeatitive tags
       var tagFlag = false;

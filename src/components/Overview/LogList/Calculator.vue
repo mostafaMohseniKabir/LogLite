@@ -5,7 +5,7 @@
     <v-list-tile avatar>
       <v-list-tile-action>
         <v-btn  v-tooltip:top="{ html: 'Delete Log' }" small outline fab class="grey">
-          <v-icon>delete</v-icon>
+          <v-icon>done_all</v-icon>
         </v-btn>
       </v-list-tile-action>
       <v-list-tile-content>

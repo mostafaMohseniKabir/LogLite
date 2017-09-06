@@ -11,7 +11,7 @@
               :value="filterTagsState"
               @input="filterTagsStateChange"
               label="Select"
-              append-icon="map"
+              append-icon="filter_list"
               max-height="400"
               hint="Pick any tag you want!"
               persistent-hint

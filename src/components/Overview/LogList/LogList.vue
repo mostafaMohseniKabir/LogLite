@@ -19,10 +19,10 @@
 
         <v-list two-line subheader>
           <v-subheader>Logs Informaton</v-subheader>
-          <v-list-tile avatar v-for="(logInfo,index) in filteredLogsInfo">
+          <v-list-tile avatar v-for="logInfo in filteredLogsInfo">
             <v-list-tile-action>
-              <v-btn  v-tooltip:top="{ html: 'Delete Log' }" small outline fab class="grey" @click='deleteLogInfo(index)'>
-                <v-icon>delete</v-icon>
+              <v-btn  v-tooltip:top="{ html: 'Delete Log' }" small outline fab class="grey" @click='deleteLogInfo(logInfo)'>
+                <v-icon>delete_forever</v-icon>
               </v-btn>
             </v-list-tile-action>
             <v-list-tile-content>
