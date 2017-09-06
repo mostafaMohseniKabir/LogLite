@@ -33,6 +33,13 @@ export const store = new Vuex.Store({
   },
 
   mutations: {
+    stopWatchStarted: state => {
+      state.datePickerState = moment().format('YYYY-MM-DD');
+      state.startTimePickerState = moment().format('H:mm:ss');
+    },
+    stopWatchEnded: state => {
+      state.endTimePickerState = moment().format('H:mm:ss');
+    },
     datePickerStateChange: (state, payload) => {
       state.datePickerState = payload;
     },
