@@ -121,19 +121,30 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
-      //avoid to add repeatitive tags
-      var tagFlag = false;
+      //avoid to add repeatitive tags in Overview
+      var tagInOverviewFlag = false;
       for(var i=0, len=state.tagsInOverview.length; i<len; i++) {
         if( (state.tagsInOverview)[i].text === state.inputTagState ) {
-          tagFlag = true;
+          tagInOverviewFlag = true;
           break;
         }
       }
-      if(!tagFlag){
-        state.tagsInEntry.push({
+      if(!tagInOverviewFlag){
+        state.tagsInOverview.push({
           text: state.inputTagState
         });
-        state.tagsInOverview.push({
+      }
+
+      //avoid to add repeatitive tags in Entry
+      var tagInEntryFlag = false;
+      for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
+        if( (state.tagsInEntry)[i].text === state.inputTagState ) {
+          tagInEntryFlag = true;
+          break;
+        }
+      }
+      if(!tagInEntryFlag){
+        state.tagsInEntry.push({
           text: state.inputTagState
         });
       }
