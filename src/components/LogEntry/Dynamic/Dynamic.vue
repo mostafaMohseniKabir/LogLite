@@ -28,6 +28,8 @@
 import StopWatch from './StopWatch.vue';
 import LogInfo from '../common/LogInfo.vue';
 import SubmitSnackbar from '../common/SubmitSnackbar.vue';
+import {mapMutations} from 'vuex';
+
 export default {
   data () {
     return {
@@ -40,12 +42,10 @@ export default {
     'app-submit-snackbar': SubmitSnackbar
   },
   methods: {
-    submitLogInfo(payload) {
-      this.$store.commit('snackbarStateChange', payload)
-    },
-    submitLogInfo(payload) {
-      this.$store.commit('submitLogInfo', payload)
-    }
+    ...mapMutations([
+      'submitLogInfo'
+    ])
+
   }
 }
 </script>

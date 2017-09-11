@@ -25,8 +25,6 @@ export default {
       runState: false
       }
   },
-  computed: {
-  },
   methods: {
     stopWatchStarted: function() {
       this.runState = true;    //for switch in DOM (between play and pause state)

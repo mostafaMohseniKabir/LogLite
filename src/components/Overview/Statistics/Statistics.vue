@@ -3,17 +3,14 @@
 
     <v-layout>
       <v-flex>
-        <slot name="filterTag"></slot>
-      </v-flex>
-      <v-flex>
         <slot name="filterDay"></slot>
       </v-flex>
     </v-layout>
 
     <v-layout>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex>
         <v-card>
-
+        <app-chart></app-chart>
         </v-card>
       </v-flex>
     </v-layout>
@@ -21,14 +18,11 @@
 </template>
 
 <script>
+import Chart from './Chart.vue';
+
 export default {
-  data () {
-    return {
-    }
-  },
   components: {
-
-
+    'app-chart': Chart
   }
 }
 </script>

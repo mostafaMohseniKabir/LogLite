@@ -24,10 +24,10 @@ export const store = new Vuex.Store({
       { text: 'Vue.js' }
     ],
     tagsInOverview: [
-      { text: 'All'},
-      { text: 'Break' },
-      { text: 'Vue.js' }
+      { text: 'All'}
     ],
+    chartLabels: [],
+    chartData: [],
     logsInfo: [],
     filteredLogsInfo: []
   },
@@ -73,7 +73,7 @@ export const store = new Vuex.Store({
       var dateOfDeletedLog = payload.date;
 
       //delete logsInfo
-      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('text', startTimeOfDeletedLog, logInfo) && R.propEq('text', dateOfDeletedLog, logInfo))(state.logsInfo),1);
+      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('text', startTimeOfDeletedLog, logInfo) && R.propEq('text', dateOfDeletedLog, logInfo)(state.logsInfo)),1);
 
       //avoid to delete repeatitive tags
       var tagFlag = false;
@@ -121,6 +121,7 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
+
       //avoid to add repeatitive tags in Overview
       var tagInOverviewFlag = false;
       for(var i=0, len=state.tagsInOverview.length; i<len; i++) {
@@ -134,6 +135,13 @@ export const store = new Vuex.Store({
           text: state.inputTagState
         });
       }
+      //   state.dataInChart.push(moment.duration(state.durationState, "ms"));
+      // } else {
+      //   var index = state.labelsInChart.indexOf(state.inputTagState);
+      //   state.dataInChart[index] += moment.duration(state.durationState, "ms");
+      // }
+      //////////////////////////////////////////////////////////////////////////////
+
 
       //avoid to add repeatitive tags in Entry
       var tagInEntryFlag = false;
@@ -184,16 +192,33 @@ export const store = new Vuex.Store({
         .filter((filteredLogInfoByTag) => {   //filter by dates
           return filteredLogInfoByTag.date.match(state.filterDatesState.text)
         })
-      },
-      totalDuration: (state, getters) => {
-        var total = 0;
-        for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
-          total += getters.filteredLogsInfo[i].duration;
-        }
-        return moment.duration(total, "ms").humanize();
-        }
     },
-
+    totalDuration: (state, getters) => {
+      var total = 0;
+      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
+        total += getters.filteredLogsInfo[i].duration;
+      }
+      return moment.duration(total, "ms").humanize();
+    },
+    dataSets: (state, getters) => {
+      var dataSetsForChart = {};
+      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
+        var hasName = R.has(getters.filteredLogsInfo[i].tag);
+        if(hasName(dataSetsForChart)) {  //tag is repeatitive
+          dataSetsForChart[getters.filteredLogsInfo[i].tag] += getters.filteredLogsInfo[i].duration;
+        } else {  ////tag isn't repeatitive
+          dataSetsForChart[getters.filteredLogsInfo[i].tag] = getters.filteredLogsInfo[i].duration;
+        }
+      }
+      return dataSetsForChart
+    },
+    chartLabels: (state, getters) => {
+      return R.keys(getters.dataSets)
+    },
+    chartDatas: (state, getters) => {
+      return R.values(getters.dataSets)
+    }
+  },
   actions: {
   }
 })

@@ -16,7 +16,7 @@ import {mapMutations} from 'vuex';
 export default {
   data () {
     return {
-      timeout: 2000,
+      timeout: 1000,
       text: 'Log Infornation is submitted successfully!'
     }
   },
