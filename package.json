@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "chart.js": "^2.6.0",
+    "hchs-vue-charts": "^1.2.8",
     "highcharts": "^5.0.14",
     "moment": "^2.18.1",
     "ramda": "^0.24.1",

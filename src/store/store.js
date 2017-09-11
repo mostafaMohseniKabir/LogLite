@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
     snackbarState: false,
     filterTagsState: {text: ""},
     filterDatesState: {text: ""},
+    filterDatesState2: {text: ""},
     dates: [],
     tagsInEntry: [
       { text: 'Break' },
@@ -29,7 +30,7 @@ export const store = new Vuex.Store({
     chartLabels: [],
     chartData: [],
     logsInfo: [],
-    filteredLogsInfo: []
+    filteredLogsInfoInLogList: []
   },
 
   mutations: {
@@ -106,6 +107,9 @@ export const store = new Vuex.Store({
     filterDatesStateChange: (state, payload) => {
       state.filterDatesState = payload;
     },
+    filterDatesStateChange2: (state, payload) => {
+      state.filterDatesState2 = payload;
+    },
     submitLogInfo: (state, payload) => {
       // snackbar is opened
       state.snackbarState = payload;
@@ -181,7 +185,7 @@ export const store = new Vuex.Store({
   },
 
   getters: {
-    filteredLogsInfo: state => {
+    filteredLogsInfoInLogList: state => {
       return state.logsInfo.filter((logInfo) => {   //filter by tags
         if(state.filterTagsState.text.match('All')){
           return true
@@ -195,28 +199,44 @@ export const store = new Vuex.Store({
     },
     totalDuration: (state, getters) => {
       var total = 0;
-      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
-        total += getters.filteredLogsInfo[i].duration;
+      for(var i=0, len=getters.filteredLogsInfoInLogList.length; i<len; i++) {
+        total += getters.filteredLogsInfoInLogList[i].duration;
       }
       return moment.duration(total, "ms").humanize();
     },
+    filteredLogsInfoInStatistics: state => {
+      return state.logsInfo.filter((logInfo) => {   //filter by dates
+        return logInfo.date.match(state.filterDatesState.text)
+      })
+    },
     dataSets: (state, getters) => {
       var dataSetsForChart = {};
-      for(var i=0, len=getters.filteredLogsInfo.length; i<len; i++) {
-        var hasName = R.has(getters.filteredLogsInfo[i].tag);
+      for(var i=0, len=getters.filteredLogsInfoInStatistics.length; i<len; i++) {
+        var hasName = R.has(getters.filteredLogsInfoInStatistics[i].tag);
         if(hasName(dataSetsForChart)) {  //tag is repeatitive
-          dataSetsForChart[getters.filteredLogsInfo[i].tag] += getters.filteredLogsInfo[i].duration;
+          dataSetsForChart[getters.filteredLogsInfoInStatistics[i].tag] += getters.filteredLogsInfoInStatistics[i].duration;
         } else {  ////tag isn't repeatitive
-          dataSetsForChart[getters.filteredLogsInfo[i].tag] = getters.filteredLogsInfo[i].duration;
+          dataSetsForChart[getters.filteredLogsInfoInStatistics[i].tag] = getters.filteredLogsInfoInStatistics[i].duration;
         }
       }
       return dataSetsForChart
     },
-    chartLabels: (state, getters) => {
+    chartLabels: (state, getters) => {   //output an array that contains labels of chart
       return R.keys(getters.dataSets)
     },
-    chartDatas: (state, getters) => {
-      return R.values(getters.dataSets)
+    chartDatas: (state, getters) => {   //output an array that contains data (values) of chart
+      var minutes =  x => x/60000;
+      return R.map(minutes, R.values(getters.dataSets))
+    },
+    chartBackgroundColor: (state, getters) => {
+      var BackgroundColor = [];
+      for(var i=0, len=getters.chartLabels.length; i<len; i++){
+        var r = Math.floor(Math.random()*256);
+        var g = Math.floor(Math.random()*256);
+        var b = Math.floor(Math.random()*256);
+        BackgroundColor.push('rgba(' + r + ',' + g + ',' + b + ', 0.5)')
+      }
+      return BackgroundColor
     }
   },
   actions: {

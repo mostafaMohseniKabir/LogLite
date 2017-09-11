@@ -1,52 +1,37 @@
 <template>
-  <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Randomize</button>
-  </div>
+  <section class="container">
+    <chartjs-bar :labels="chartLabels" :data="chartDatas" :option="myoption" :bind="true" :backgroundcolor="chartBackgroundColor"></chartjs-bar>
+  </section>
 </template>
 
-<script>
-  import LineChart from './LineChart.js'
 
+<script>
+  import {mapGetters} from 'vuex';
   export default {
-    components: {
-      'line-chart': LineChart
-    },
     data () {
       return {
-        datacollection: null
-      }
-    },
-    mounted () {
-      this.fillData()
-    },
-    methods: {
-      fillData () {
-        this.datacollection = {
-          labels: [this.getRandomInt(), this.getRandomInt()],
-          datasets: [
-            {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
-            }, {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
+          myoption:{
+            responsive:true,
+            maintainAspectRatio:true,
+            title: {
+                display: true,
+                position: 'bottom',
+                text: 'Report'
+            },
+            scales: {
+                yAxes: [{
+                    stacked: true
+                }]
             }
-          ]
         }
-      },
-      getRandomInt () {
-        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
       }
+    },
+    computed: {
+      ...mapGetters([
+        'chartLabels',
+        'chartDatas',
+        'chartBackgroundColor',
+      ])
     }
   }
 </script>
-
-<style>
-  .small {
-    max-width: 600px;
-    margin:  150px auto;
-  }
-</style>

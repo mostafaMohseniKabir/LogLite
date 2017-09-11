@@ -29,8 +29,7 @@
     >
       <v-card flat>
         <app-statistics>
-          <app-filter-tags slot="filterTag"></app-filter-tags>
-          <app-filter-days slot="filterDay"></app-filter-days>
+            <app-filter-days slot="filterDay"></app-filter-days>
         </app-statistics>
       </v-card>
     </v-tabs-content>
@@ -42,8 +41,8 @@
     <script>
       import Statistics from './Statistics/Statistics.vue';
       import LogList from './LogList/LogList.vue';
-      import FilterTags from './common/FilterTags.vue';
-      import FilterDays from './common/FilterDays.vue';
+      import FilterTags from './LogList/FilterTags.vue';
+      import FilterDays from './LogList/FilterDays.vue';
       export default {
         components: {
           'app-log-list': LogList,

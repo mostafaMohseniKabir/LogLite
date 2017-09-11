@@ -38,6 +38,10 @@ import {mapState} from 'vuex';
 import {mapMutations} from 'vuex';
 export default {
   computed: {
+    x() {
+      console.log(this.tagsInEntry)
+      return this.tagsInEntry
+    },
     ...mapState([
       'inputTagState',
       'tagsInEntry'

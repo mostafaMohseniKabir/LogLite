@@ -6,14 +6,11 @@
         <slot name="filterDay"></slot>
       </v-flex>
     </v-layout>
-
+    <v-divider></v-divider>
     <v-layout>
-      <v-flex>
-        <v-card>
-        <app-chart></app-chart>
-        </v-card>
-      </v-flex>
+       <app-chart></app-chart>
     </v-layout>
+
   </div>
 </template>
 
