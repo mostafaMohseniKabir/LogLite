@@ -1,5 +1,4 @@
 <template>
-
   <v-list two-line subheader>
     <v-subheader>Total</v-subheader>
     <v-list-tile avatar>
@@ -16,7 +15,6 @@
   </v-list>
 </template>
 
-
 <script>
   import {mapState} from 'vuex';
   import {mapGetters} from 'vuex';
@@ -24,9 +22,7 @@
     computed: {
       ...mapState([
         'filterTagsState',
-        'filterDatesState',
-        'startTime',
-        'endTime',
+        'filterDatesState'
       ]),
       ...mapGetters([
         'totalDuration'

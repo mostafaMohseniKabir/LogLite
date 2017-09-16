@@ -7,7 +7,7 @@ moment().format();
 
 export const store = new Vuex.Store({
   debug: true,
-  strict: true,
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     datePickerState: null,
     timePickerStateIsEnd: null,
@@ -74,7 +74,7 @@ export const store = new Vuex.Store({
       var dateOfDeletedLog = payload.date;
 
       //delete logsInfo
-      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('text', startTimeOfDeletedLog, logInfo) && R.propEq('text', dateOfDeletedLog, logInfo)(state.logsInfo)),1);
+      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', startTimeOfDeletedLog, logInfo) && R.propEq('date', dateOfDeletedLog, logInfo))(state.logsInfo),1);
 
       //avoid to delete repeatitive tags
       var tagFlag = false;
