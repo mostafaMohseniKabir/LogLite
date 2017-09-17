@@ -16,23 +16,20 @@ export const store = new Vuex.Store({
     durationState: null,
     inputTagState: null,
     snackbarState: false,
-    filterTagsState: {text: ""},
-    filterDatesState: {text: ""},
-    filterDatesState2: {text: ""},
-    dates: [],
-    tagsInEntry: [
-      { text: 'Break' },
-      { text: 'Vue.js' }
-    ],
-    tagsInOverview: [
-      { text: 'All'}
-    ],
-    chartLabels: [],
-    chartData: [],
+    filterTagsState: null,
+    filterDatesState: null,
+    filterDatesState2: null,
+    // dates: [],
+    // tagsInEntry: [
+    //   { text: 'Break' },
+    //   { text: 'Vue.js' }
+    // ],
+    // tagsInOverview: [
+    //   { text: 'All'}
+    // ],
     logsInfo: [],
-    filteredLogsInfoInLogList: []
   },
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   mutations: {
     stopWatchStarted: state => {
       state.datePickerState = moment().format('YYYY-MM-DD');
@@ -75,31 +72,6 @@ export const store = new Vuex.Store({
 
       //delete logsInfo
       state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', startTimeOfDeletedLog, logInfo) && R.propEq('date', dateOfDeletedLog, logInfo))(state.logsInfo),1);
-
-      //avoid to delete repeatitive tags
-      var tagFlag = false;
-      for(var i=0, len=state.logsInfo.length; i<len; i++) {
-        if( state.logsInfo[i].tag === tagOfDeletedLog ) {
-          tagFlag = true;
-          break;
-        }
-      }
-      if(!tagFlag){
-        ;
-        state.tagsInOverview.splice(R.findIndex(R.propEq('text', tagOfDeletedLog))(state.tagsInOverview),1);
-      }
-
-      //avoid to delete repeatitive dates
-      var dateFlag = false;
-      for(var i=0, len=state.logsInfo.length; i<len; i++) {
-        if( state.logsInfo[i].date === dateOfDeletedLog ) {
-          dateFlag = true;
-          break;
-        }
-      }
-      if(!dateFlag){
-        state.dates.splice(R.findIndex(R.propEq('text', dateOfDeletedLog))(state.dates),1);
-        };
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -125,57 +97,19 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
-
-      //avoid to add repeatitive tags in Overview
-      var tagInOverviewFlag = false;
-      for(var i=0, len=state.tagsInOverview.length; i<len; i++) {
-        if( (state.tagsInOverview)[i].text === state.inputTagState ) {
-          tagInOverviewFlag = true;
-          break;
-        }
-      }
-      if(!tagInOverviewFlag){
-        state.tagsInOverview.push({
-          text: state.inputTagState
-        });
-      }
-      //   state.dataInChart.push(moment.duration(state.durationState, "ms"));
-      // } else {
-      //   var index = state.labelsInChart.indexOf(state.inputTagState);
-      //   state.dataInChart[index] += moment.duration(state.durationState, "ms");
-      // }
-      //////////////////////////////////////////////////////////////////////////////
-
-
       //avoid to add repeatitive tags in Entry
-      var tagInEntryFlag = false;
-      for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
-        if( (state.tagsInEntry)[i].text === state.inputTagState ) {
-          tagInEntryFlag = true;
-          break;
-        }
-      }
-      if(!tagInEntryFlag){
-        state.tagsInEntry.push({
-          text: state.inputTagState
-        });
-      }
-
-        //avoid to add repeatitive dates
-        var dateFlag = false;
-        for(var i=0, len=state.dates.length; i<len; i++) {
-          if( (state.dates)[i].text === state.datePickerState ) {
-            dateFlag = true;
-            break;
-          }
-        }
-        if(!dateFlag){
-          state.dates.push({
-            text: state.datePickerState
-          });
-      }
-
-
+      // var tagInEntryFlag = false;
+      // for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
+      //   if( (state.tagsInEntry)[i] === state.inputTagState ) {
+      //     tagInEntryFlag = true;
+      //     break;
+      //   }
+      // }
+      // if(!tagInEntryFlag){
+      //   state.tagsInEntry.push({
+      //     state.inputTagState
+      //   });
+      // }
 
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
       state.endTimePickerState = null;  //set next endTime to null
@@ -187,14 +121,20 @@ export const store = new Vuex.Store({
   getters: {
     filteredLogsInfoInLogList: state => {
       return state.logsInfo.filter((logInfo) => {   //filter by tags
-        if(state.filterTagsState.text.match('All')){
+        if(state.filterTagsState === null){
           return true
-        } else if(logInfo.tag) {  //checks if tag isn't selected by user
-          return logInfo.tag.match(state.filterTagsState.text)
         }
-        })
+        else {
+          return logInfo.tag.match(state.filterTagsState)
+        }
+      })
         .filter((filteredLogInfoByTag) => {   //filter by dates
-          return filteredLogInfoByTag.date.match(state.filterDatesState.text)
+          if(state.filterDatesState === null){
+            return true
+          }
+          else {
+            return filteredLogInfoByTag.date.match(state.filterDatesState)
+          }
         })
     },
     totalDuration: (state, getters) => {
@@ -206,7 +146,12 @@ export const store = new Vuex.Store({
     },
     filteredLogsInfoInStatistics: state => {
       return state.logsInfo.filter((logInfo) => {   //filter by dates
-        return logInfo.date.match(state.filterDatesState.text)
+        if(state.filterDatesState2 === null){
+          return true
+        }
+        else {
+          return logInfo.date.match(state.filterDatesState2)
+        }
       })
     },
     dataSets: (state, getters) => {
@@ -237,6 +182,14 @@ export const store = new Vuex.Store({
         BackgroundColor.push('rgba(' + r + ',' + g + ',' + b + ', 0.5)')
       }
       return BackgroundColor
+    },
+    datesInventory: state => {
+      var shit = x => R.prop('date', x);
+      return R.uniq(R.map(shit, state.logsInfo))
+    },
+    tagsInventory: state => {
+      var shit = x => R.prop('tag', x);
+      return R.uniq(R.map(shit, state.logsInfo))
     }
   },
   actions: {

@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex md12 lg4 lg-offset8 id='timePicker'>
-      <v-time-picker scrollable :value="timePickerStateIsEnd?endTimePickerState:startTimePickerState" @input="timePickerStateChange"  format="24hr" dark></v-time-picker>
+      <v-time-picker scrollable :value="timePickerStateIsEnd?endTimePickerState:startTimePickerState" @input="timePickerStateChange"  format="24hr"></v-time-picker>
     </v-flex>
   </v-layout>
 </template>

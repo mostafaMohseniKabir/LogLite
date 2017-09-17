@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-0" dark>
+  <v-card class="elevation-0">
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
@@ -7,7 +7,7 @@
           </v-flex>
           <v-flex xs6>
             <v-select
-              :items="tagsInOverview"
+              :items="tagsInventory"
               :value="filterTagsState"
               @input="filterTagsStateChange"
               label="Select"
@@ -26,12 +26,15 @@
 
 <script>
 import {mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import {mapMutations} from 'vuex';
 export default {
   computed: {
     ...mapState([
-      'filterTagsState',
-      'tagsInOverview'
+      'filterTagsState'
+    ]),
+    ...mapGetters([
+      'tagsInventory'
     ])
   },
   methods: {

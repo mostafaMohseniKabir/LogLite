@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-0" dark>
+  <v-card class="elevation-0">
     <v-card-text>
       <v-container fluid>
           <v-flex xs6>
@@ -7,7 +7,7 @@
           </v-flex>
           <v-flex xs12 sm6>
             <v-select
-              :items="dates"
+              :items="datesInventory"
               :value="filterDatesState2"
               @input="filterDatesStateChange2"
               label="Select"
@@ -26,12 +26,15 @@
 
 <script>
 import {mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import {mapMutations} from 'vuex';
 export default {
   computed: {
     ...mapState([
-      'filterDatesState2',
-      'dates'
+      'filterDatesState2'
+    ]),
+    ...mapGetters([
+      'datesInventory'
     ])
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="secondary elevation-0">
+  <v-card class="elevation-0">
     <v-card-text>
       <v-container fluid>
         <v-layout row wrap>
@@ -15,13 +15,12 @@
                 name="input"
                 :value="inputTagState" @input="inputTagStateChange"
                 label="Your favorite tag!"
-                dark
                 slot="activator"
               ></v-text-field>
 
               <v-list>
-                <v-list-tile v-for="tag in tagsInEntry" :key="tag.text" @click="chooseTagFromMenu(tag.text)">
-                  <v-list-tile-title>{{ tag.text }}</v-list-tile-title>
+                <v-list-tile v-for="tag in tagsInventory" :key="tag" @click="chooseTagFromMenu(tag)">
+                  <v-list-tile-title>{{ tag }}</v-list-tile-title>
               </v-list-tile>
               </v-list>
             </v-menu>
@@ -35,16 +34,15 @@
 
 <script>
 import {mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import {mapMutations} from 'vuex';
 export default {
   computed: {
-    x() {
-      console.log(this.tagsInEntry)
-      return this.tagsInEntry
-    },
     ...mapState([
-      'inputTagState',
-      'tagsInEntry'
+      'inputTagState'
+    ]),
+    ...mapGetters([
+      'tagsInventory'
     ])
   },
   methods: {

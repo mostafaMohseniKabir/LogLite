@@ -1,84 +1,63 @@
 <template>
-  <v-app
-    height="415px"
-    dark
-    id="e3"
-    standalone
-  >
+  <v-app id="example-2" toolbar>
     <v-navigation-drawer
-      class="pb-0"
-      persistent
-      absolute
-      height="100%"
-      clipped
-      enable-resize-watcher
+      temporary
       v-model="drawer"
+      light
+      overflow
+      absolute
     >
-      <v-list dense>
-        <v-list-tile v-for="item in items" :key="item.text">
+      <v-list class="pa-1">
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img src="../public/photo_2017-08-30_15-36-52.jpg" />
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>Log Lite</v-list-tile-title>
+          </v-list-tile-content>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
+        <v-list-tile v-for="item in items" :key="item.title">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
             <router-link :to="item.link">
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ item.text }}
-              </v-list-tile-title>
-            </v-list-tile-content>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
             </router-link>
         </v-list-tile>
       </v-list>
-
     </v-navigation-drawer>
-    <v-toolbar class="red">
-      <v-toolbar-title>
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
+    <v-toolbar fixed class="deep-orange" dark>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Toolbar</v-toolbar-title>
     </v-toolbar>
-
     <main>
-      <v-container>
-        <v-layout>
-          <v-flex xs12>
-              <router-view></router-view>
-          </v-flex>
-        </v-layout>
+      <v-container fluid>
+        <router-view></router-view>
       </v-container>
     </main>
   </v-app>
 </template>
 
-
 <script>
-
   export default {
-    data: () => ({
-      drawer: true,
-      items: [
-        { icon: 'edit', text: 'LogEntry', link: '/' },
-        { icon: 'list', text: 'Overview', link: '/Overview' }
-      ]
-    })
+    data () {
+      return {
+        drawer: null,
+        items: [
+          { title: 'LogEntry', icon: 'edit', link: '/' },
+          { title: 'Overview', icon: 'list', link: '/Overview' }
+        ],
+        right: null
+      }
+    }
   }
 </script>
-
-
-<style scoped>
-  #e3, #e3 .container {
-    min-height: 700px;
-    overflow: hidden;
-    z-index: 0;
-  }
-
-  #e3 .input-group__details:after {
-    background-color: rgba(255,255,255,0.32) !important;
-  }
-
-  #e3 .input-group--focused .input-group__append-icon {
-    color: inherit !important;
-  }
-</style>
 
 <style lang="stylus">
   @import './stylus/main'

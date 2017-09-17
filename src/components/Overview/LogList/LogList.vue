@@ -1,11 +1,6 @@
 <template>
       <v-card>
 
-        <v-toolbar class="teal" dark>
-          <v-toolbar-side-icon></v-toolbar-side-icon>
-          <v-toolbar-title>Settings</v-toolbar-title>
-        </v-toolbar>
-
         <v-layout>
           <v-flex >
             <slot name="filterTag"></slot>

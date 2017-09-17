@@ -14,7 +14,6 @@
       <small>Write or select a tag for the task!</small>
     </v-stepper-step>
     <v-stepper-content step="2">
-
       <app-logInfo></app-logInfo>
       <app-submit-snackbar></app-submit-snackbar>
       <v-btn  primary @click.native="dynamicSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
