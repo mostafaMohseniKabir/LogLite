@@ -4,6 +4,7 @@ Vue.use(Vuex);
 const R = require('ramda');
 var moment = require('moment');
 moment().format();
+const request = require('superagent');
 
 export const store = new Vuex.Store({
   debug: true,
@@ -19,18 +20,13 @@ export const store = new Vuex.Store({
     filterTagsState: null,
     filterDatesState: null,
     filterDatesState2: null,
-    // dates: [],
-    // tagsInEntry: [
-    //   { text: 'Break' },
-    //   { text: 'Vue.js' }
-    // ],
-    // tagsInOverview: [
-    //   { text: 'All'}
-    // ],
     logsInfo: [],
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   mutations: {
+    importFromServer: (state, payload) => {
+      state.logsInfo =  payload;
+    },
     stopWatchStarted: state => {
       state.datePickerState = moment().format('YYYY-MM-DD');
       state.startTimePickerState = moment().format('H:mm:ss');
@@ -65,13 +61,20 @@ export const store = new Vuex.Store({
     },
     deleteLogInfo: (state, payload) => {
 
-      //tag and date are stored before deleting them
-      var startTimeOfDeletedLog = payload.startTime;
-      var tagOfDeletedLog = payload.tag;
-      var dateOfDeletedLog = payload.date;
+      //remove from database
+      request.post('http://localhost:3000/deleteLogInfo')
+        .set('Access-Control-Allow-Origin', '*')
+        .send(payload)
+        .end(function(err, res){
+             if (err || !res.ok) {
+               alert('Oh no! error');
+             } else {
+               alert('yay got');
+             }
+         })
 
       //delete logsInfo
-      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', startTimeOfDeletedLog, logInfo) && R.propEq('date', dateOfDeletedLog, logInfo))(state.logsInfo),1);
+      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', payload.startTime, logInfo) && R.propEq('date', payload.date, logInfo))(state.logsInfo),1);
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -97,27 +100,32 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
-      //avoid to add repeatitive tags in Entry
-      // var tagInEntryFlag = false;
-      // for(var i=0, len=state.tagsInEntry.length; i<len; i++) {
-      //   if( (state.tagsInEntry)[i] === state.inputTagState ) {
-      //     tagInEntryFlag = true;
-      //     break;
-      //   }
-      // }
-      // if(!tagInEntryFlag){
-      //   state.tagsInEntry.push({
-      //     state.inputTagState
-      //   });
-      // }
+      var newLogsInfo = {
+        tag: state.inputTagState,
+        startTime: state.startTimePickerState,
+        endTime: state.endTimePickerState,
+        date: state.datePickerState,
+        duration: state.durationState
+      };
 
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
       state.endTimePickerState = null;  //set next endTime to null
 
 
+      //send to database
+      request.post('http://localhost:3000/insertLogInfo')
+        .set('Access-Control-Allow-Origin', '*')
+        .send(newLogsInfo)
+        .end(function(err, res){
+             if (err || !res.ok) {
+               alert('Oh no! error');
+             } else {
+               alert('yay got');
+             }
+         })
     }
   },
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getters: {
     filteredLogsInfoInLogList: state => {
       return state.logsInfo.filter((logInfo) => {   //filter by tags
@@ -193,5 +201,14 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    fetchLogsInfo (context) {
+      console.log('from fetchLogsInfo')
+      request
+        .get('http://localhost:3000')
+        .set('Access-Control-Allow-Origin', '*')
+        .end(function(err, res){
+          context.commit('importFromServer', res.body )
+        });
+      }
   }
 })

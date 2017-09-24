@@ -55,6 +55,12 @@
         ],
         right: null
       }
+    },
+    mounted: function() {
+      console.log('from mounted!')
+      this.$nextTick(function () {
+        this.$store.dispatch('fetchLogsInfo')
+      })
     }
   }
 </script>

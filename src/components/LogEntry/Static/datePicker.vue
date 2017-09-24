@@ -19,7 +19,7 @@ export default {
     ...mapMutations([
       'datePickerStateChange'
     ])
-    }
+  }
 }
 </script>
 
