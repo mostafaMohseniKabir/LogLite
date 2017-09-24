@@ -6,7 +6,6 @@ app.use(cors({
   origin: '*',
 }));
 
-
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -20,13 +19,7 @@ function errorHandler(err, req, res, next) {
 }
 app.use(errorHandler);
 
-// app.get('/', function(req, res, next) {
-//   res.send('fruitPicker', {'fruits': [ 'apple', 'orange']
-//   });
-// });
-
 var db
-
 MongoClient.connect('mongodb://localhost:27017/test', function(err, database) {
   if(err) throw err.message;
   db = database;

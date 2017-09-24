@@ -1,12 +1,12 @@
 <template>
   <v-snackbar
     :timeout="timeout"
-    :success=true
-    :value="snackbarState"
-    @input="snackbarStateChange"
+    :error=true
+    :value="snackbarForDelete"
+    @input="snackbarForDeleteStateChange"
   >
     {{ text }}
-    <v-btn dark flat @click.native="snackbarStateChange(false)">Close</v-btn>
+    <v-btn dark flat @click.native="snackbarForDeleteStateChange(false)">Close</v-btn>
   </v-snackbar>
 </template>
 
@@ -17,17 +17,17 @@ export default {
   data () {
     return {
       timeout: 1500,
-      text: 'Log Infornation is submitted successfully!'
+      text: 'Log Infornation is deleted successfully!'
     }
   },
   computed: {
     ...mapState([
-      'snackbarState'
+      'snackbarForDelete'
     ])
   },
   methods: {
     ...mapMutations([
-      'snackbarStateChange'
+      'snackbarForDeleteStateChange'
     ])
   }
 }

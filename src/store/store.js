@@ -10,6 +10,8 @@ export const store = new Vuex.Store({
   debug: true,
   strict: process.env.NODE_ENV !== 'production',
   state: {
+    snackbarForDelete: false,
+    dialog: false,
     datePickerState: null,
     timePickerStateIsEnd: null,
     startTimePickerState: null,
@@ -56,10 +58,18 @@ export const store = new Vuex.Store({
     snackbarStateChange: (state, payload) => {
       state.snackbarState = payload;
     },
+    snackbarForDeleteStateChange: (state, payload) => {
+      state.snackbarForDelete = payload;
+    },
     chooseTagFromMenu: (state, payload) => {
       state.inputTagState = payload;
     },
+    dialogChangeState: (state, payload) => {
+      state.dialog = payload;
+    },
     deleteLogInfo: (state, payload) => {
+
+      state.snackbarForDelete = true;
 
       //remove from database
       request.post('http://localhost:3000/deleteLogInfo')
@@ -85,9 +95,9 @@ export const store = new Vuex.Store({
     filterDatesStateChange2: (state, payload) => {
       state.filterDatesState2 = payload;
     },
-    submitLogInfo: (state, payload) => {
+    submitLogInfo: state => {
       // snackbar is opened
-      state.snackbarState = payload;
+      state.snackbarState = true;
 
       // calculation of duration
       state.durationState = moment(state.datePickerState + "T" + state.endTimePickerState).diff(moment(state.datePickerState + "T" + state.startTimePickerState));
@@ -200,11 +210,12 @@ export const store = new Vuex.Store({
       return R.uniq(R.map(shit, state.logsInfo))
     }
   },
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
       console.log('from fetchLogsInfo')
       request
-        .get('http://localhost:3000')
+      .get('http://localhost:3000')
         .set('Access-Control-Allow-Origin', '*')
         .end(function(err, res){
           context.commit('importFromServer', res.body )

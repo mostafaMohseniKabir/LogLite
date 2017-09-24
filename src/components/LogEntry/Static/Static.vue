@@ -36,7 +36,7 @@
     <v-stepper-content step="4">
       <app-logInfo></app-logInfo>
       <app-submit-snackbar></app-submit-snackbar>
-      <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo(true)">Finish</v-btn>
+      <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo">Finish</v-btn>
       <v-btn flat @click.native="staticSteppersState = 3">Previous</v-btn>
     </v-stepper-content>
   </v-stepper>

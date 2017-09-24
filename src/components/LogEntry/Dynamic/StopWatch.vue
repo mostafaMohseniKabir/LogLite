@@ -13,11 +13,9 @@
 </template>
 
 <script>
-var moment = require('moment');   //moment.js
+var moment = require('moment');   //moment.js library
 moment().format();
 export default {
-  components: {
-  },
   data() {
     return {
       stopWatch: moment().hour(0).minute(0).second(0).millisecond(0).format('H:mm:ss:SS'),
