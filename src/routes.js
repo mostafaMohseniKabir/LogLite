@@ -1,7 +1,11 @@
-import LogEntry from './components/LogEntry/LogEntry.vue';
-import Overview from './components/Overview/Overview.vue';
+import Static from './components/LogEntry/Static/Static.vue';
+import Dynamic from './components/LogEntry/Dynamic/Dynamic.vue';
+import LogList from './components/Overview/LogList/LogList.vue';
+import Statistics from './components/Overview/Statistics/Statistics.vue';
 
 export default [
-  {path: '/', component:LogEntry},
-  {path: '/Overview', component:Overview}
+  {path: '/', component:Static},
+  {path: '/Dynamic', component:Dynamic},
+  {path: '/Overview/LogList', component:LogList },
+  {path: '/Overview/Statistics', component:Statistics }
 ]

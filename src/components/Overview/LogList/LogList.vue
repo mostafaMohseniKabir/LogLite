@@ -3,10 +3,10 @@
         <!-- component for filters -->
         <v-layout>
           <v-flex >
-            <slot name="filterTag"></slot>
+            <app-filter-tags></app-filter-tags>
           </v-flex>
           <v-flex>
-            <slot name="filterDay"></slot>
+            <app-filter-days-in-logList></app-filter-days-in-logList>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -51,6 +51,8 @@
 
 
 <script>
+  import FilterDaysInLogList from './FilterDaysInLogList.vue';
+  import FilterTags from './FilterTags.vue';
   import Calculator  from './Calculator.vue';
   import SnackbarForDelete from './SnackbarForDelete.vue';
   import {mapState} from 'vuex';
@@ -63,6 +65,8 @@
         }
       },
       components: {
+        'app-filter-tags': FilterTags,
+        'app-filter-days-in-logList': FilterDaysInLogList,
         'app-calculator': Calculator,
         'app-delete-snackbar': SnackbarForDelete
       },

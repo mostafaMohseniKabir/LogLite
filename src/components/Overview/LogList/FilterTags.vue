@@ -10,12 +10,26 @@
               :items="tagsInventory"
               :value="filterTagsState"
               @input="filterTagsStateChange"
+              append-icon="filter_list"
               multiple
               chips
+              tags
+              solo
+              clearable
               hint="Pick any tag you want!"
               persistent-hint
               autocomplete
-            ></v-select>
+            >
+              <template slot="selection" scope="data">
+                <v-chip
+                   outline
+                   class="green green--text"
+                   :selected="data.selected"
+                 >
+                   <strong>{{ data.item }}</strong>
+                 </v-chip>
+              </template>
+            </v-select>
           </v-flex>
     </v-card-text>
   </v-card>

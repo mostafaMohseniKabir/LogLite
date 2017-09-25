@@ -3,7 +3,7 @@
 
     <v-layout>
       <v-flex>
-        <slot name="filterDay"></slot>
+        <app-filter-days-in-statistics></app-filter-days-in-statistics>
       </v-flex>
     </v-layout>
     <v-divider></v-divider>
@@ -16,9 +16,11 @@
 
 <script>
 import Chart from './Chart.vue';
+import FilterDaysInStatistics from './FliterDaysInStatistics.vue';
 
 export default {
   components: {
+    'app-filter-days-in-statistics': FilterDaysInStatistics,
     'app-chart': Chart
   }
 }
