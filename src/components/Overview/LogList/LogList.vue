@@ -24,7 +24,7 @@
             <v-list-tile-action>
               <!-- dialog box -->
               <v-dialog v-model="dialog" lazy absolute>
-                <v-btn slot="activator" class="blue" ripple v-tooltip:left="{ html: 'Delete Log' }" small icon>
+                <v-btn slot="activator" class="blue ma-2" ripple v-tooltip:left="{ html: 'Delete Log' }"  icon>
                   <v-icon class="blue white--text text--lighten-1">delete_forever</v-icon>
                 </v-btn>
                 <v-card>

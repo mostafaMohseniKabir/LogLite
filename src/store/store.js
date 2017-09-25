@@ -110,13 +110,6 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
-      var newLogsInfo = {
-        tag: state.inputTagState,
-        startTime: state.startTimePickerState,
-        endTime: state.endTimePickerState,
-        date: state.datePickerState,
-        duration: state.durationState
-      };
 
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
       state.endTimePickerState = null;  //set next endTime to null
@@ -125,7 +118,7 @@ export const store = new Vuex.Store({
       //send to database
       request.post('http://localhost:3000/insertLogInfo')
         .set('Access-Control-Allow-Origin', '*')
-        .send(newLogsInfo)
+        .send(state.logsInfo[state.logsInfo.length-1])
         .end(function(err, res){
              if (err || !res.ok) {
                alert('Oh no! error');
@@ -143,7 +136,7 @@ export const store = new Vuex.Store({
           return true
         }
         else {
-          return logInfo.tag.match(state.filterTagsState)
+          return state.filterTagsState.includes(logInfo.tag)
         }
       })
         .filter((filteredLogInfoByTag) => {   //filter by dates
@@ -203,19 +196,18 @@ export const store = new Vuex.Store({
     },
     datesInventory: state => {
       var shit = x => R.prop('date', x);
-      return R.uniq(R.map(shit, state.logsInfo))
+      return R.uniq(R.map(shit, state.logsInfo)).sort()
     },
     tagsInventory: state => {
       var shit = x => R.prop('tag', x);
-      return R.uniq(R.map(shit, state.logsInfo))
+      return R.uniq(R.map(shit, state.logsInfo)).sort()
     }
   },
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
       console.log('from fetchLogsInfo')
-      request
-      .get('http://localhost:3000')
+      request.get('http://localhost:3000')
         .set('Access-Control-Allow-Origin', '*')
         .end(function(err, res){
           context.commit('importFromServer', res.body )

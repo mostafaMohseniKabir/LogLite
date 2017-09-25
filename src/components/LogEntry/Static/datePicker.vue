@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
-    <v-flex md12 lg4 id='datePicker'>
-      <v-date-picker :value="datePickerState" @input="datePickerStateChange" actions></v-date-picker>
+    <v-flex md12 lg4 >
+      <v-date-picker id='datePicker' :value="datePickerState" @input="datePickerStateChange" actions year-icon></v-date-picker>
     </v-flex>
   </v-layout>
 </template>
@@ -26,6 +26,6 @@ export default {
 
 <style media="screen">
   #datePicker {
-    overflow: ;
+    
   }
 </style>
