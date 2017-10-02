@@ -1,10 +1,7 @@
 <template>
-  <v-card class="elevation-0">
-    <v-card-text>
-      <v-container fluid>
+      <v-container fluid grid-list-md text-xs-center class="ma-0 pa-0">
         <v-layout row wrap>
-          <v-flex xs12>
-
+          <v-flex>
             <v-menu offset-x
             transition="slide-x-transition"
             bottom
@@ -19,17 +16,14 @@
               ></v-text-field>
 
               <v-list>
-                <v-list-tile v-for="tag in tagsInventory" :key="tag" @click="chooseTagFromMenu(tag)">
+                <v-list-tile v-for="tag in searchInTagsInventory" :key="tag" @click="chooseTagFromMenu(tag)">
                   <v-list-tile-title>{{ tag }}</v-list-tile-title>
               </v-list-tile>
               </v-list>
             </v-menu>
-
           </v-flex>
         </v-layout>
       </v-container>
-    </v-card-text>
-  </v-card>
 </template>
 
 <script>
@@ -42,7 +36,7 @@ export default {
       'inputTagState'
     ]),
     ...mapGetters([
-      'tagsInventory'
+      'searchInTagsInventory'
     ])
   },
   methods: {

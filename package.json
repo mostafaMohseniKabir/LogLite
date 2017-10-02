@@ -6,23 +6,19 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot --host=0.0.0.0",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --watch"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "chart.js": "^2.6.0",
     "cors": "^2.8.4",
     "hchs-vue-charts": "^1.2.8",
-    "highcharts": "^5.0.14",
     "moment": "^2.18.1",
     "mongodb": "^2.2.31",
     "ramda": "^0.24.1",
     "superagent": "^3.6.0",
     "vue": "^2.4.2",
-    "vue-chartjs": "^2.8.4",
-    "vue-countup-v2": "^0.1.2",
     "vue-router": "^2.7.0",
-    "vuebars": "^0.1.1",
     "vuetify": "^0.14.11",
     "vuex": "^2.4.0"
   },

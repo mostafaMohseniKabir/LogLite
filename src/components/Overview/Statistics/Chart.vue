@@ -1,7 +1,11 @@
 <template>
-  <section class="container">
-    <chartjs-bar :labels="chartLabels" :data="chartDatas" :option="myoption" :bind="true" :backgroundcolor="chartBackgroundColor"></chartjs-bar>
-  </section>
+  <v-layout>
+    <v-flex xs12>
+      <section class="container">
+        <chartjs-bar :labels="chartLabels" :data="chartDatas" :option="myoption" :bind="true" :backgroundcolor="chartBackgroundColor"></chartjs-bar>
+      </section>
+    </v-flex>
+  </v-layout>
 </template>
 
 

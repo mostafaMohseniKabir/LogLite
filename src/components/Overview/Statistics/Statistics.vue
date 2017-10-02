@@ -1,17 +1,13 @@
 <template>
-  <div>
-
-    <v-layout>
+  <v-container fluid>
       <v-flex>
         <app-filter-days-in-statistics></app-filter-days-in-statistics>
       </v-flex>
-    </v-layout>
     <v-divider></v-divider>
-    <v-layout>
+    <v-flex>
        <app-chart></app-chart>
-    </v-layout>
-
-  </div>
+    </v-flex>
+  </v-container>
 </template>
 
 <script>

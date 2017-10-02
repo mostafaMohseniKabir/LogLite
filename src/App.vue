@@ -1,13 +1,12 @@
 <template>
-  <v-app id="example-2" toolbar>
+  <v-app toolbar>
     <v-navigation-drawer
       temporary
       v-model="drawer"
       light
       overflow
-      absolute
     >
-
+    <!-- application intro in drawer -->
     <v-list class="pa-1">
       <v-list-tile avatar>
         <v-list-tile-avatar>
@@ -19,13 +18,12 @@
         </v-list-tile-action>
       </v-list-tile>
     </v-list>
-
-
+    <!-- list in navigation drawer -->
     <v-list>
       <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
         <v-list-tile slot="item" @click="">
           <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon large class="blue--text text--darken-2">{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -36,28 +34,29 @@
         </v-list-tile>
         <v-list-tile v-for="subItem in item.subItems" v-bind:key="subItem.title" @click="">
           <router-link :to="subItem.link">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-          </v-list-tile-content>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+            </v-list-tile-content>
+            <!-- <v-list-tile-action>
+              <v-icon>{{ subItem.icon }}</v-icon>
+            </v-list-tile-action> -->
           </router-link>
-          <v-list-tile-action>
-            <v-icon>{{ subItem.icon }}</v-icon>
-          </v-list-tile-action>
         </v-list-tile>
       </v-list-group>
     </v-list>
-
+    <!-- toolbar -->
     </v-navigation-drawer>
-    <v-toolbar fixed class="deep-orange" dark>
+    <v-toolbar class="elevation-12 grey lighten-2">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Log Lite</v-toolbar-title>
     </v-toolbar>
     <main>
+      <v-container fluid class='ma-0 pa-0' >
         <router-view></router-view>
+      </v-container>
     </main>
   </v-app>
 </template>
-
 
 <script>
   export default {
@@ -66,8 +65,8 @@
         drawer: null,
         right: null,
         items: [
-              { title: 'Enter Log', icon:'restaurant', subItems: [{title: 'Static',icon:'restaurant', link: '/' }, {title: 'Dynamic', icon:'restaurant', link: '/Dynamic'}]},
-              { title: 'Overview', icon: 'list', subItems: [{title: 'Log List',icon:'restaurant', link: '/Overview/LogList'}, {title: 'Statistics',icon:'restaurant', link: '/Overview/Statistics'}]}
+              { title: 'Enter Log', icon:'present_to_all', subItems: [{title: 'Static',icon:'', link: '/' }, {title: 'Dynamic', icon:'', link: '/Dynamic'}]},
+              { title: 'Overview', icon: 'list', subItems: [{title: 'Log List',icon:'', link: '/Overview/LogList'}, {title: 'Statistics',icon:'', link: '/Overview/Statistics'}]}
             ]
       }
     },

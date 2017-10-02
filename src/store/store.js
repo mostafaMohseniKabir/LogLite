@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
   debug: true,
   strict: process.env.NODE_ENV !== 'production',
   state: {
+    dynamicSteppersState: 1,
     snackbarForDelete: false,
     dialog: false,
     datePickerState: null,
@@ -46,6 +47,9 @@ export const store = new Vuex.Store({
         state.startTimePickerState = payload;
       }
     },
+    dynamicSteppersStateChange: (state, payload) => {
+      state.dynamicSteppersState = payload;
+    },
     submitStartTime: state => {
       state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
     },
@@ -68,23 +72,24 @@ export const store = new Vuex.Store({
       state.dialog = payload;
     },
     deleteLogInfo: (state, payload) => {
-
+      // snackbar is opened
       state.snackbarForDelete = true;
 
+      //delete logsInfo from the view
+      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', payload.startTime, logInfo) && R.propEq('date', payload.date, logInfo))(state.logsInfo),1);
+
       //remove from database
-      request.post('http://localhost:3000/deleteLogInfo')
+      request
+        .post('http://localhost:3000/deleteLogInfo')
         .set('Access-Control-Allow-Origin', '*')
         .send(payload)
         .end(function(err, res){
              if (err || !res.ok) {
                alert('Oh no! error');
              } else {
-               alert('yay got');
+               alert('yay deleted');
              }
          })
-
-      //delete logsInfo
-      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', payload.startTime, logInfo) && R.propEq('date', payload.date, logInfo))(state.logsInfo),1);
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -116,7 +121,8 @@ export const store = new Vuex.Store({
 
 
       //send to database
-      request.post('http://localhost:3000/insertLogInfo')
+      request
+        .post('http://localhost:3000/insertLogInfo')
         .set('Access-Control-Allow-Origin', '*')
         .send(state.logsInfo[state.logsInfo.length-1])
         .end(function(err, res){
@@ -201,17 +207,27 @@ export const store = new Vuex.Store({
     tagsInventory: state => {
       var shit = x => R.prop('tag', x);
       return R.uniq(R.map(shit, state.logsInfo)).sort()
+    },
+    searchInTagsInventory: (state, getters) => {
+      return getters.tagsInventory.filter((tag) => {
+        if(!state.inputTagState) {
+          return true
+        } else {
+          return tag.match(state.inputTagState)
+        }
+      })
     }
   },
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
       console.log('from fetchLogsInfo')
-      request.get('http://localhost:3000')
+      request
+        .get('http://localhost:3000')
         .set('Access-Control-Allow-Origin', '*')
         .end(function(err, res){
           context.commit('importFromServer', res.body )
         });
-      }
+    }
   }
 })

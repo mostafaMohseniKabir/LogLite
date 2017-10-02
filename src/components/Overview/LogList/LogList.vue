@@ -1,19 +1,15 @@
 <template>
-      <v-card>
-        <!-- component for filters -->
-        <v-layout>
-          <v-flex >
-            <app-filter-tags></app-filter-tags>
-          </v-flex>
-          <v-flex>
-            <app-filter-days-in-logList></app-filter-days-in-logList>
-          </v-flex>
-        </v-layout>
-        <v-divider></v-divider>
-        <!-- component for logs list information -->
+  <v-container fluid>
+    <!-- component for filters -->
+    <app-filter-tags></app-filter-tags>
+    <app-filter-days-in-logList></app-filter-days-in-logList>
+    <v-divider></v-divider>
+    <!-- component for logs list information -->
+    <v-layout row>
+      <v-flex xs-12>
         <v-list two-line subheader>
-          <v-subheader inset>Logs Informaton</v-subheader>
-          <v-list-tile avatar v-for="logInfo in filteredLogsInfoInLogList">
+          <v-subheader>Logs Informaton</v-subheader>
+          <v-list-tile avatar v-for="logInfo in filteredLogsInfoInLogList" :key="logInfo.__id">
             <v-list-tile-avatar>
               <v-icon class="blue white--text">assignment</v-icon>
             </v-list-tile-avatar>
@@ -24,7 +20,7 @@
             <v-list-tile-action>
               <!-- dialog box -->
               <v-dialog v-model="dialog" lazy absolute>
-                <v-btn slot="activator" class="blue ma-2" ripple v-tooltip:left="{ html: 'Delete Log' }"  icon>
+                <v-btn slot="activator" class="blue mt-2 mr-3" ripple v-tooltip:left="{ html: 'Delete Log' }"  icon>
                   <v-icon class="blue white--text text--lighten-1">delete_forever</v-icon>
                 </v-btn>
                 <v-card>
@@ -46,7 +42,9 @@
         </v-list>
         <!-- component for total duration -->
         <app-calculator></app-calculator>
-      </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 
