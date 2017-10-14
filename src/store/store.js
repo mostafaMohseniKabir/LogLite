@@ -159,7 +159,10 @@ export const store = new Vuex.Store({
       for(var i=0, len=getters.filteredLogsInfoInLogList.length; i<len; i++) {
         total += getters.filteredLogsInfoInLogList[i].duration;
       }
-      return moment.duration(total, "ms").humanize();
+      return moment.utc(total).format("HH:mm:ss");
+
+
+      alert(f)
     },
     filteredLogsInfoInStatistics: state => {
       return state.logsInfo.filter((logInfo) => {   //filter by dates
