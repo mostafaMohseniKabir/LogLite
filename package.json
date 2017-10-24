@@ -13,6 +13,7 @@
     "body-parser": "^1.18.2",
     "chart.js": "^2.6.0",
     "cors": "^2.8.4",
+    "element-ui": "^1.4.7",
     "hchs-vue-charts": "^1.2.8",
     "moment": "^2.18.1",
     "mongodb": "^2.2.31",

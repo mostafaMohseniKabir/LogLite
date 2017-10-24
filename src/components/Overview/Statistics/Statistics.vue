@@ -7,6 +7,7 @@
     <v-flex>
        <app-chart></app-chart>
     </v-flex>
+
   </v-container>
 </template>
 

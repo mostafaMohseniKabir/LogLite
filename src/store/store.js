@@ -41,11 +41,7 @@ export const store = new Vuex.Store({
       state.datePickerState = payload;
     },
     timePickerStateChange: (state, payload) => {
-      if(state.timePickerStateIsEnd) {
-        state.endTimePickerState = payload;
-      } else {
-        state.startTimePickerState = payload;
-      }
+      state.timePickerStateIsEnd ? state.endTimePickerState = payload : state.startTimePickerState = payload
     },
     dynamicSteppersStateChange: (state, payload) => {
       state.dynamicSteppersState = payload;
@@ -75,6 +71,7 @@ export const store = new Vuex.Store({
       // snackbar is opened
       state.snackbarForDelete = true;
 
+      console.log(payload)
       //delete logsInfo from the view
       state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', payload.startTime, logInfo) && R.propEq('date', payload.date, logInfo))(state.logsInfo),1);
 
@@ -84,11 +81,7 @@ export const store = new Vuex.Store({
         .set('Access-Control-Allow-Origin', '*')
         .send(payload)
         .end(function(err, res){
-             if (err || !res.ok) {
-               alert('Oh no! error');
-             } else {
-               alert('yay deleted');
-             }
+             err || !res.ok ? alert('Oh no! error') : alert('yay deleted')
          })
     },
     filterTagsStateChange: (state, payload) => {
@@ -115,10 +108,8 @@ export const store = new Vuex.Store({
           duration: state.durationState
       });
 
-
       state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
       state.endTimePickerState = null;  //set next endTime to null
-
 
       //send to database
       request
@@ -126,114 +117,55 @@ export const store = new Vuex.Store({
         .set('Access-Control-Allow-Origin', '*')
         .send(state.logsInfo[state.logsInfo.length-1])
         .end(function(err, res){
-             if (err || !res.ok) {
-               alert('Oh no! error');
-             } else {
-               alert('yay got');
-             }
+             err || !res.ok ? alert('Oh no! error') : alert('yay got')
          })
     }
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getters: {
-    filteredLogsInfoInLogList: state => {
-      return state.logsInfo.filter((logInfo) => {   //filter by tags
-        if(state.filterTagsState === null){
-          return true
-        }
-        else {
-          return state.filterTagsState.includes(logInfo.tag)
-        }
-      })
-        .filter((filteredLogInfoByTag) => {   //filter by dates
-          if(state.filterDatesState === null){
-            return true
-          }
-          else {
-            return filteredLogInfoByTag.date.match(state.filterDatesState)
-          }
-        })
-    },
-    totalDuration: (state, getters) => {
-      var total = 0;
-      for(var i=0, len=getters.filteredLogsInfoInLogList.length; i<len; i++) {
-        total += getters.filteredLogsInfoInLogList[i].duration;
-      }
-      return moment.utc(total).format("HH:mm:ss");
+    filteredLogsInfoInLogList: state => state.logsInfo.filter((logInfo) =>   //filter by tags
+        state.filterTagsState === null ? true : state.filterTagsState.includes(logInfo.tag))
+        .filter((filteredLogInfoByTag) =>   //filter by dates
+          state.filterDatesState === null ? true : filteredLogInfoByTag.date.match(state.filterDatesState)),
 
+    totalDuration: (state, getters) =>
+      moment.utc(R.reduce(R.add, 0, R.map(x => x.duration, getters.filteredLogsInfoInLogList))).format("HH:mm:ss"),
 
-      alert(f)
-    },
-    filteredLogsInfoInStatistics: state => {
-      return state.logsInfo.filter((logInfo) => {   //filter by dates
-        if(state.filterDatesState2 === null){
-          return true
-        }
-        else {
-          return logInfo.date.match(state.filterDatesState2)
-        }
-      })
-    },
-    dataSets: (state, getters) => {
-      var dataSetsForChart = {};
-      for(var i=0, len=getters.filteredLogsInfoInStatistics.length; i<len; i++) {
-        var hasName = R.has(getters.filteredLogsInfoInStatistics[i].tag);
-        if(hasName(dataSetsForChart)) {  //tag is repeatitive
-          dataSetsForChart[getters.filteredLogsInfoInStatistics[i].tag] += getters.filteredLogsInfoInStatistics[i].duration;
-        } else {  ////tag isn't repeatitive
-          dataSetsForChart[getters.filteredLogsInfoInStatistics[i].tag] = getters.filteredLogsInfoInStatistics[i].duration;
-        }
-      }
-      return dataSetsForChart
-    },
-    chartLabels: (state, getters) => {   //output an array that contains labels of chart
-      return R.keys(getters.dataSets)
-    },
-    chartDatas: (state, getters) => {   //output an array that contains data (values) of chart
-      var minutes =  x => x/60000;
-      return R.map(minutes, R.values(getters.dataSets))
-    },
-    chartBackgroundColor: (state, getters) => {
-      var BackgroundColor = [];
-      for(var i=0, len=getters.chartLabels.length; i<len; i++){
-        var r = Math.floor(Math.random()*256);
-        var g = Math.floor(Math.random()*256);
-        var b = Math.floor(Math.random()*256);
-        BackgroundColor.push('rgba(' + r + ',' + g + ',' + b + ', 0.5)')
-      }
-      return BackgroundColor
-    },
-    datesInventory: state => {
-      var shit = x => R.prop('date', x);
-      return R.uniq(R.map(shit, state.logsInfo)).sort()
-    },
-    tagsInventory: state => {
-      var shit = x => R.prop('tag', x);
-      return R.uniq(R.map(shit, state.logsInfo)).sort()
-    },
-    searchInTagsInventory: (state, getters) => {
-      return getters.tagsInventory.filter((tag) => {
-        if(!state.inputTagState) {
-          return true
-        } else {
-          return tag.match(state.inputTagState)
-        }
-      })
-    },
-    getHoursOfStartTime: state => {
-      if(state.startTimePickerState) {
-        return parseInt(R.slice(0, 2, state.startTimePickerState))
-      }
-      return 0
-    },
-    getMinutesOfStartTime: state => {
-      if(state.startTimePickerState) {
-        return parseInt(R.slice(3, 5, state.startTimePickerState))
-      }
-      return 0
-    }
+    filteredLogsInfoInStatistics: state => state.logsInfo.filter((logInfo) =>   //filter by dates
+       state.filterDatesState2 === null ? true : logInfo.date.match(state.filterDatesState2)),
+
+    dataSets: (state, getters) => R.reduce((acc, logIngo) => R.has(logIngo.tag)(acc) ?
+       R.assoc(logIngo.tag, logIngo.tag + logIngo.duration, acc) :
+       R.assoc(logIngo.tag, logIngo.duration, acc), {}, getters.filteredLogsInfoInStatistics),
+
+    chartLabels: (state, getters) => R.keys(getters.dataSets),  //output an array that contains labels of chart
+
+    chartDatas: (state, getters) => R.map(x => x/60000, R.values(getters.dataSets)), //output an array that contains data (values) of chart
+
+    chartBackgroundColor: (state, getters) => R.map(() => 'rgba(' + Math.floor(Math.random()*256) +
+       ',' + Math.floor(Math.random()*256) + ',' +
+       Math.floor(Math.random()*256) + ', 0.5)', Array(getters.chartLabels.length)),
+
+    datesInventory: state => R.uniq(R.map(x => R.prop('date', x), state.logsInfo)).sort(),
+
+    tagsInventory: state => R.uniq(R.map(x => R.prop('tag', x), state.logsInfo)).sort(),
+
+    searchInTagsInventory: (state, getters) => getters.tagsInventory.filter((tag) =>
+        !state.inputTagState ? true : tag.match(state.inputTagState)),
+  //   getHoursOfStartTime: state => {
+  //     if(state.startTimePickerState) {
+  //       return parseInt(R.slice(0, 2, state.startTimePickerState))
+  //     }
+  //     return 0
+  //   },
+  //   getMinutesOfStartTime: state => {
+  //     if(state.startTimePickerState) {
+  //       return parseInt(R.slice(3, 5, state.startTimePickerState))
+  //     }
+  //     return 0
+  //   }
   },
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
       request
