@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-app toolbar>
     <v-navigation-drawer
       temporary
@@ -18,6 +19,7 @@
         </v-list-tile-action>
       </v-list-tile>
     </v-list>
+
     <!-- list in navigation drawer -->
     <v-list>
       <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
@@ -44,6 +46,7 @@
         </v-list-tile>
       </v-list-group>
     </v-list>
+
     <!-- toolbar -->
     </v-navigation-drawer>
     <v-toolbar class="elevation-12 grey lighten-2">
@@ -51,12 +54,14 @@
       <v-toolbar-title>Log Lite</v-toolbar-title>
     </v-toolbar>
     <main>
-      <v-container fluid class='ma-0 pa-0' >
+      <v-container fluid class='ma-0 pa-0'>
         <router-view></router-view>
       </v-container>
     </main>
   </v-app>
+</div>
 </template>
+
 
 <script>
   export default {
@@ -71,7 +76,6 @@
       }
     },
     mounted: function() {
-      console.log('from mounted!')
       this.$nextTick(function () {
         this.$store.dispatch('fetchLogsInfo')
       })

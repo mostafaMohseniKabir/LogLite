@@ -32,10 +32,10 @@ export const store = new Vuex.Store({
     },
     stopWatchStarted: state => {
       state.datePickerState = moment().format('YYYY-MM-DD');
-      state.startTimePickerState = moment().format('H:mm:ss');
+      state.startTimePickerState = moment().format('HH:mm:ss');
     },
     stopWatchEnded: state => {
-      state.endTimePickerState = moment().format('H:mm:ss');
+      state.endTimePickerState = moment().format('HH:mm:ss');
     },
     datePickerStateChange: (state, payload) => {
       state.datePickerState = payload;
@@ -219,12 +219,23 @@ export const store = new Vuex.Store({
           return tag.match(state.inputTagState)
         }
       })
+    },
+    getHoursOfStartTime: state => {
+      if(state.startTimePickerState) {
+        return parseInt(R.slice(0, 2, state.startTimePickerState))
+      }
+      return 0
+    },
+    getMinutesOfStartTime: state => {
+      if(state.startTimePickerState) {
+        return parseInt(R.slice(3, 5, state.startTimePickerState))
+      }
+      return 0
     }
   },
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
-      console.log('from fetchLogsInfo')
       request
         .get('http://localhost:3000')
         .set('Access-Control-Allow-Origin', '*')

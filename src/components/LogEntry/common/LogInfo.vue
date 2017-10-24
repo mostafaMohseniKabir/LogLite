@@ -26,6 +26,30 @@
       </v-container>
 </template>
 
+<!-- <template>
+  <v-container fluid grid-list-md text-xs-center class="ma-0 pa-0">
+    <v-layout row wrap>
+      <v-flex>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header">push me! :)</div>
+            <v-card>
+              <template v-for="tag in tagsInventory">
+                <v-btn
+                  color="lime lighten-2"
+                >
+                  {{tag}}
+                  <v-icon right dark>label</v-icon>
+                </v-btn>
+              </template>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template> -->
+
 <script>
 import {mapState} from 'vuex';
 import {mapGetters} from 'vuex';
