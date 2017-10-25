@@ -10,15 +10,14 @@ export const store = new Vuex.Store({
   debug: true,
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    dynamicSteppersState: 1,
+    popoverVisible: false,
     snackbarForDelete: false,
     dialog: false,
     datePickerState: null,
-    timePickerStateIsEnd: null,
     startTimePickerState: null,
     endTimePickerState: null,
     durationState: null,
-    inputTagState: null,
+    inputTagState: [],
     snackbarState: false,
     filterTagsState: null,
     filterDatesState: null,
@@ -27,6 +26,9 @@ export const store = new Vuex.Store({
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   mutations: {
+    popoverVisibleChange: (state, payload) => {
+      state.popoverVisible =  payload;
+    },
     importFromServer: (state, payload) => {
       state.logsInfo =  payload;
     },
@@ -38,13 +40,13 @@ export const store = new Vuex.Store({
       state.endTimePickerState = moment().format('HH:mm:ss');
     },
     datePickerStateChange: (state, payload) => {
-      state.datePickerState = payload;
+      state.datePickerState = moment(payload).format('YYYY-MM-DD');
     },
-    timePickerStateChange: (state, payload) => {
-      state.timePickerStateIsEnd ? state.endTimePickerState = payload : state.startTimePickerState = payload
+    startTimePickerStateChange: (state, payload) => {
+      state.startTimePickerState = payload;
     },
-    dynamicSteppersStateChange: (state, payload) => {
-      state.dynamicSteppersState = payload;
+    endTimePickerStateChange: (state, payload) => {
+      state.endTimePickerState = payload;
     },
     submitStartTime: state => {
       state.timePickerStateIsEnd = !state.timePickerStateIsEnd;
@@ -61,28 +63,30 @@ export const store = new Vuex.Store({
     snackbarForDeleteStateChange: (state, payload) => {
       state.snackbarForDelete = payload;
     },
-    chooseTagFromMenu: (state, payload) => {
-      state.inputTagState = payload;
-    },
     dialogChangeState: (state, payload) => {
       state.dialog = payload;
     },
     deleteLogInfo: (state, payload) => {
+
+      const index = R.findIndex(R.propEq('_id', payload))(state.logsInfo)
+
+      //popover is closed
+      state.popoverVisible = false;
+
       // snackbar is opened
       state.snackbarForDelete = true;
-
-      console.log(payload)
-      //delete logsInfo from the view
-      state.logsInfo.splice(R.findIndex(logInfo => R.propEq('startTime', payload.startTime, logInfo) && R.propEq('date', payload.date, logInfo))(state.logsInfo),1);
 
       //remove from database
       request
         .post('http://localhost:3000/deleteLogInfo')
         .set('Access-Control-Allow-Origin', '*')
-        .send(payload)
+        .send(state.logsInfo[index])
         .end(function(err, res){
              err || !res.ok ? alert('Oh no! error') : alert('yay deleted')
          })
+
+       //delete logsInfo from the view
+       state.logsInfo.splice(index,1);
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -94,8 +98,13 @@ export const store = new Vuex.Store({
       state.filterDatesState2 = payload;
     },
     submitLogInfo: state => {
+
       // snackbar is opened
       state.snackbarState = true;
+      // convert start time and end time to standard format
+      state.endTimePickerState = moment(state.endTimePickerState).format('HH:mm:ss');
+      state.startTimePickerState = moment(state.startTimePickerState).format('HH:mm:ss');
+
 
       // calculation of duration
       state.durationState = moment(state.datePickerState + "T" + state.endTimePickerState).diff(moment(state.datePickerState + "T" + state.startTimePickerState));
@@ -107,10 +116,10 @@ export const store = new Vuex.Store({
           date: state.datePickerState,
           duration: state.durationState
       });
-
-      state.startTimePickerState = state.endTimePickerState;   //set next startTime to endTime of previous submit
-      state.endTimePickerState = null;  //set next endTime to null
-
+      //reset states
+      state.startTimePickerState = null;
+      state.endTimePickerState = null;
+      state.inputTagState = null;
       //send to database
       request
         .post('http://localhost:3000/insertLogInfo')
@@ -134,36 +143,23 @@ export const store = new Vuex.Store({
     filteredLogsInfoInStatistics: state => state.logsInfo.filter((logInfo) =>   //filter by dates
        state.filterDatesState2 === null ? true : logInfo.date.match(state.filterDatesState2)),
 
-    dataSets: (state, getters) => R.reduce((acc, logIngo) => R.has(logIngo.tag)(acc) ?
-       R.assoc(logIngo.tag, logIngo.tag + logIngo.duration, acc) :
-       R.assoc(logIngo.tag, logIngo.duration, acc), {}, getters.filteredLogsInfoInStatistics),
+    // dataSets: (state, getters) => R.reduce((acc, logIngo) => R.has(logIngo.tag)(acc) ?
+    //    R.assoc(logIngo.tag, logIngo.tag + logIngo.duration, acc) :
+    //    R.assoc(logIngo.tag, logIngo.duration, acc), {}, getters.filteredLogsInfoInStatistics),
+    //
+    // chartLabels: (state, getters) => R.keys(getters.dataSets),  //output an array that contains labels of chart
+    //
+    // chartDatas: (state, getters) => R.map(x => x/60000, R.values(getters.dataSets)), //output an array that contains data (values) of chart
+    //
+    // chartBackgroundColor: (state, getters) => R.map(() => 'rgba(' + Math.floor(Math.random()*256) +
+    //    ',' + Math.floor(Math.random()*256) + ',' +
+    //    Math.floor(Math.random()*256) + ', 0.5)', Array(getters.chartLabels.length)),
 
-    chartLabels: (state, getters) => R.keys(getters.dataSets),  //output an array that contains labels of chart
+    datesInventory: state => R.uniq(R.map(x => R.prop('date', x), state.logsInfo)),
 
-    chartDatas: (state, getters) => R.map(x => x/60000, R.values(getters.dataSets)), //output an array that contains data (values) of chart
+    tagsInventory: state => R.uniq(R.unnest(R.map(x => R.prop('tag', x), state.logsInfo))),
 
-    chartBackgroundColor: (state, getters) => R.map(() => 'rgba(' + Math.floor(Math.random()*256) +
-       ',' + Math.floor(Math.random()*256) + ',' +
-       Math.floor(Math.random()*256) + ', 0.5)', Array(getters.chartLabels.length)),
-
-    datesInventory: state => R.uniq(R.map(x => R.prop('date', x), state.logsInfo)).sort(),
-
-    tagsInventory: state => R.uniq(R.map(x => R.prop('tag', x), state.logsInfo)).sort(),
-
-    searchInTagsInventory: (state, getters) => getters.tagsInventory.filter((tag) =>
-        !state.inputTagState ? true : tag.match(state.inputTagState)),
-  //   getHoursOfStartTime: state => {
-  //     if(state.startTimePickerState) {
-  //       return parseInt(R.slice(0, 2, state.startTimePickerState))
-  //     }
-  //     return 0
-  //   },
-  //   getMinutesOfStartTime: state => {
-  //     if(state.startTimePickerState) {
-  //       return parseInt(R.slice(3, 5, state.startTimePickerState))
-  //     }
-  //     return 0
-  //   }
+    filterTags: (state, getters) => R.map(tag => R.zipObj(['text', 'value'], [tag, tag]), getters.tagsInventory)
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {

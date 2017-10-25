@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
       <v-flex>
-        <app-filter-days-in-statistics></app-filter-days-in-statistics>
+        <!-- <app-filter-days-in-statistics></app-filter-days-in-statistics> -->
       </v-flex>
     <v-divider></v-divider>
     <v-flex>
-       <app-chart></app-chart>
+       <!-- <app-chart></app-chart> -->
     </v-flex>
 
   </v-container>

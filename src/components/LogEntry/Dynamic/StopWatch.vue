@@ -40,7 +40,7 @@ export default {
     stopWatchEnded: function() {
       this.runState = false;
       clearInterval(this.myVar);
-      this.$store.commit('dynamicSteppersStateChange', 2);
+      // this.$store.commit('dynamicSteppersStateChange', 2);
       this.$store.commit('stopWatchEnded');  //to save stop time of stopwatch
     },
     stopWatchReseted: function() {

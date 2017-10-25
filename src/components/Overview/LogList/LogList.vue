@@ -1,147 +1,143 @@
-<!-- <template>
-  <el-table
-    :data="tableData"
-    border
-    style="width: 100%">
-    <el-table-column
-      label="Date"
-      width="180">
-      <template scope="scope">
-        <el-icon name="time"></el-icon>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="Name"
-      width="180">
-      <template scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>Name: {{ scope.row.name }}</p>
-          <p>Addr: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag>{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="Operations">
-      <template scope="scope">
-        <el-button
-          size="small"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-</template> -->
-
-
 <template>
-  <v-container fluid>
-    <!-- component for filters -->
-    <app-filter-tags></app-filter-tags>
-    <app-filter-days-in-logList></app-filter-days-in-logList>
-    <v-divider></v-divider>
-    <!-- component for logs list information -->
-    <v-layout row>
-      <v-flex xs-12>
-        <v-list two-line subheader>
-          <v-subheader>Logs Informaton</v-subheader>
-          <v-list-tile avatar v-for="logInfo in filteredLogsInfoInLogList" :key="logInfo.__id">
-            <v-list-tile-avatar>
-              <v-icon class="blue white--text">assignment</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{logInfo.tag}}</v-list-tile-title>
-              <v-list-tile-sub-title>{{logInfo.startTime}} to {{logInfo.endTime}} in {{logInfo.date}}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-btn slot="activator" @click.native.stop="dialog = true" class="blue mt-2 mr-3" ripple v-tooltip:left="{ html: 'Delete Log' }"  icon>
-                <v-icon class="blue white--text text--lighten-1">delete_forever</v-icon>
-              </v-btn>
-              <!-- dialog box -->
-              <v-dialog v-model="dialog" lazy absolute>
-                <v-card>
-                  <v-card-title>
-                    <div class="headline">Seriously?!</div>
-                  </v-card-title>
-                  <v-card-text>Are you sure you want to delete this log information from logs list?</v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Nope</v-btn>
-                    <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false" @click="deleteLogInfo(logInfo)">Yep</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- snackbar for delete action -->
-              <app-delete-snackbar></app-delete-snackbar>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
-        <!-- component for total duration -->
-        <app-calculator></app-calculator>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <div>
+    <el-table
+      :data="logsInfo"
+      border
+      highlight-current-row
+      tooltip-effect="dark"
+      :summary-method="getSummaries"
+      show-summary
+      style="width: 100% margin-top: 20px">
+      <el-table-column
+        prop="date"
+        label="Date"
+        sortable
+        show-overflow-tooltip
+        align="center"
+        min-width="140">
+        <template scope="scope">
+          <el-icon name="time"></el-icon>
+          <span style="margin-left: 10px">{{ scope.row.date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="startTime"
+        label="Start Time"
+        show-overflow-tooltip
+        align="center"
+        min-width="120">
+      </el-table-column>
+      <el-table-column
+        prop="endTime"
+        label="End Time"
+        show-overflow-tooltip
+        align="center"
+        min-width="120">
+      </el-table-column>
+      <el-table-column
+        prop="duration"
+        label="Duration"
+        sortable
+        show-overflow-tooltip
+        align="center"
+        min-width="120">
+      </el-table-column>
+      <el-table-column
+        prop="tag"
+        label="tag"
+        show-overflow-tooltip
+        align="center"
+        min-width="360"
+        :filters="filterTags" :filter-method="filterTag" filter-placement="bottom-start">
+          <template scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <template v-for="tag in scope.row.tag">
+                  <el-tag style="margin-left: 10px" type="warning">{{ tag }}</el-tag>
+                </template>
+              </div>
+          </template>
+      </el-table-column>
+      <el-table-column
+        prop="_id"
+        label="action"
+        align="center"
+        min-width="100">
+        <template scope="scope">
+          <el-popover
+            ref="popover"
+            placement="left"
+            align="center"
+            width="160"
+            :value="popoverVisible"
+            @input="popoverVisibleChange(true)">
+            <p>Are you sure to delete this?</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="popoverVisibleChange(false)">cancel</el-button>
+              <el-button size="mini" type="primary" @click="deleteLogInfo(scope.row._id)">confirm</el-button>
+            </div>
+          </el-popover>
+          <el-button  v-popover:popover type="danger" icon="delete" size="small">Delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <app-delete-snackbar></app-delete-snackbar>
+  </div>
 </template>
 
-
 <script>
-  import FilterDaysInLogList from './FilterDaysInLogList.vue';
-  import FilterTags from './FilterTags.vue';
-  import Calculator  from './Calculator.vue';
+  const R = require('ramda');
+  var moment = require('moment');
+  moment().format();
   import SnackbarForDelete from './SnackbarForDelete.vue';
   import { mapState } from 'vuex';
   import { mapGetters } from 'vuex';
   import { mapMutations } from 'vuex';
   export default {
-    data() {
-      return {
-        tableData: [{
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        }, {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        }, {
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        }, {
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        }],
-        dialog: false
-      }
-    },
       components: {
-        'app-filter-tags': FilterTags,
-        'app-filter-days-in-logList': FilterDaysInLogList,
-        'app-calculator': Calculator,
-        'app-delete-snackbar': SnackbarForDelete
+        'app-delete-snackbar': SnackbarForDelete,
       },
       computed: {
+        ...mapState([
+          'popoverVisible',
+          'logsInfo'
+        ]),
         ...mapGetters([
-          'filteredLogsInfoInLogList'
+          'filterTags'
         ])
       },
       methods: {
         ...mapMutations([
-          'deleteLogInfo'
+          'deleteLogInfo',
+          'popoverVisibleChange',
         ]),
-        handleEdit(index, row) {
-          console.log(index, row);
-        },
-        handleDelete(index, row) {
-          console.log(index, row);
-        }
+        getSummaries(param) {
+          const { columns, data } = param;
+          const sums = [];
+          columns.forEach((column, index) => {
+            if (index === 0) {
+              sums[index] = 'Total Duration';
+              return;
+            }
+            const values = data.map(item => Number(item[column.property]));
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+            } else {
+              sums[index] = 'N/A';
+            }
+          });
+         sums[3] = moment.utc(sums[3]).format("HH:mm:ss")
+         return sums;
+       },
+       filterTag(value, row) {
+        return R.contains(value, row.tag);
+      }
     }
   }
 </script>

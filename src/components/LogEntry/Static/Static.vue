@@ -1,90 +1,98 @@
 <template>
-  <v-container fluid id="stepper"  class='pa-0'>
-    <v-layout row>
-      <v-flex>
-        <v-stepper v-model="staticSteppersState">
-          <v-stepper-header>
-            <v-stepper-step step="1" :complete="staticSteppersState > 1">Stert Time
-              <small>Select start time of the task!</small>
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="2" :complete="staticSteppersState > 2">End Time
-              <small>Select end time of the task!</small>
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="3" :complete="staticSteppersState > 3">Date
-              <small>Select date of the task!</small>
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="4" :complete="staticSteppersState > 4">Description
-              <small>Write or select a tag for the task!</small>
-            </v-stepper-step>
-          </v-stepper-header>
+  <div>
+    <el-carousel :autoplay=false trigger="click" height="200px" @change="next">
+      <el-carousel-item v-for="item in 3" :key="item">
+        <template v-if="item === 1">
+          <el-row>
+              <el-col class="components">
+                <app-startTimePicker></app-startTimePicker>
+                <app-endTimePicker></app-endTimePicker>
+              </el-col>
+          </el-row>
+        </template>
+        <template v-else-if="item === 2">
+          <el-row>
+              <el-col class="components">
+                <app-datePicker></app-datePicker>
+              </el-col>
+          </el-row>
+        </template>
+        <template v-else>
+          <el-row>
+              <el-col class="components">
+                <app-logInfo></app-logInfo>
+                <el-button @click="submitLogInfo(true)" type="primary" icon="plus">Add</el-button>
+            </el-col>
+          </el-row>
+        </template>
+      </el-carousel-item>
+    </el-carousel>
+    <app-submit-snackbar></app-submit-snackbar>
 
-
-          <v-stepper-content step="1">
-            <app-timePicker></app-timePicker>
-            <v-flex xs8 offset-xs2 sm-4 offset-sm4 md3 offset-md5 class='pa-0'>
-              <v-btn primary @click.native="staticSteppersState = 2" @click="submitStartTime">Continue</v-btn>
-            </v-flex>
-          </v-stepper-content>
-
-          <v-stepper-content step="2">
-            <app-timePicker></app-timePicker>
-            <v-flex xs8 offset-xs2 sm-4 offset-sm4 md3 offset-md5 class='pa-0'>
-              <v-btn primary @click.native="staticSteppersState = 3" @click="submitEndTime">Continue</v-btn>
-              <v-btn flat @click.native="staticSteppersState = 1" @click="submitEndTime">Previous</v-btn>
-            </v-flex>
-          </v-stepper-content>
-
-          <v-stepper-content step="3">
-            <app-datePicker></app-datePicker>
-            <v-flex xs8 offset-xs2 sm-4 offset-sm4 md3 offset-md5 class='pa-0'>
-              <v-btn primary @click.native="staticSteppersState = 4">Continue</v-btn>
-              <v-btn flat @click.native="staticSteppersState =2" @click="submitEndTime">Previous</v-btn>
-            </v-flex>
-          </v-stepper-content>
-
-          <v-stepper-content step="4">
-            <app-logInfo></app-logInfo>
-            <v-flex xs8 offset-xs2 sm-4 offset-sm4 md3 offset-md5 class='pa-0'>
-              <v-btn primary @click.native="staticSteppersState = 1" @click="submitLogInfo">Finish</v-btn>
-              <v-btn flat @click.native="staticSteppersState = 3">Previous</v-btn>
-            </v-flex>
-          </v-stepper-content>
-        </v-stepper>
-        <!-- snackbar for submit -->
-        <app-submit-snackbar></app-submit-snackbar>
-      </v-flex>
-    </v-layout>
-  </v-container>
+    <el-steps center :active="active">
+      <el-step title="Step 1" icon="time"></el-step>
+      <el-step title="Step 2" icon="date"></el-step>
+      <el-step title="Step 3" icon="document"></el-step>
+    </el-steps>
+  </div>
 </template>
 
 
 <script>
 import datePicker from './datePicker.vue';
-import timePicker from './timePicker.vue';
+import startTimePicker from './startTimePicker.vue';
+import endTimePicker from './endTimePicker.vue';
 import LogInfo from '../common/LogInfo.vue';
 import SubmitSnackbar from '../common/SubmitSnackbar.vue';
-import {mapMutations} from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
   data () {
     return {
-      staticSteppersState: 1
+      active: 0
     }
   },
   components: {
     'app-datePicker': datePicker,
-    'app-timePicker': timePicker,
+    'app-startTimePicker': startTimePicker,
+    'app-endTimePicker': endTimePicker,
     'app-logInfo': LogInfo,
     'app-submit-snackbar': SubmitSnackbar
   },
   methods: {
     ...mapMutations([
-      'submitStartTime',
-      'submitEndTime',
       'submitLogInfo'
-    ])
+    ]),
+    next() {
+      if (this.active++ > 2) this.active = 1;
+    }
   }
 }
 </script>
+
+.<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(3n) {
+    background-color: #18ffff;
+  }
+
+  .el-carousel__item:nth-child(3n+1) {
+    background-color: #64ffda;
+  }
+
+  .el-carousel__item:nth-child(3n+2) {
+    background-color: #dce775;
+  }
+
+  .components {
+    text-align: center;
+    margin: auto;
+    margin-top: 85px;
+  }
+</style>

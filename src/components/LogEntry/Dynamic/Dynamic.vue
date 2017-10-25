@@ -1,65 +1,78 @@
-
 <template>
-  <v-container fluid id="stepper"  class='pa-0'>
-    <v-layout row>
-      <v-flex>
-        <v-stepper :value="dynamicSteppersState" @change="dynamicSteppersStateChange">
-          <v-stepper-header>
-            <v-stepper-step step="1" :complete="dynamicSteppersState > 1">Count your work time
-              <small>Push the start button to start counting!</small>
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="2" :complete="dynamicSteppersState > 2">Description
-              <small>Write or select a tag for the task!!</small>
-            </v-stepper-step>
-          </v-stepper-header>
-          <v-stepper-content id="kind" step="1">
-                  <app-stopWatch></app-stopWatch>
-                  <!-- <v-btn primary @click.native="dynamicSteppersState = 2">Continue</v-btn> -->
-          </v-stepper-content>
-          <v-stepper-content step="2">
-            <app-logInfo></app-logInfo>
-            <v-flex xs8 offset-xs2 sm-4 offset-sm4 md3 offset-md5 class='pa-0'>
-              <v-btn primary @click.native="dynamicSteppersStateChange(1)" @click="submitLogInfo(true)">Finish</v-btn>
-              <v-btn flat @click.native="dynamicSteppersStateChange(1)">Previous</v-btn>
-            </v-flex>
-          </v-stepper-content>
-        </v-stepper>
-        <!-- snackbar for submit -->
+  <div>
+        <el-carousel :autoplay=false trigger="click" height="200px" @change="next">
+          <el-carousel-item v-for="item in 2" :key="item">
+            <app-stopWatch v-if="item === 1"></app-stopWatch>
+            <template v-else>
+              <el-row>
+                <el-col class="components">
+                  <app-logInfo></app-logInfo>
+                  <el-button @click="submitLogInfo(true)" type="primary" icon="plus">Add</el-button>
+                </el-col>
+              </el-row>
+            </template>
+          </el-carousel-item>
+        </el-carousel>
         <app-submit-snackbar></app-submit-snackbar>
-      </v-flex>
-    </v-layout>
-  </v-container>
+
+        <el-steps center :active="active" >
+          <el-step title="Step 1" icon="time"></el-step>
+          <el-step title="Step 2" icon="document"></el-step>
+        </el-steps>
+  </div>
 </template>
+
+
+
 
 <script>
   import StopWatch from './StopWatch.vue';
   import LogInfo from '../common/LogInfo.vue';
   import SubmitSnackbar from '../common/SubmitSnackbar.vue';
-  import {mapMutations} from 'vuex';
-  import {mapState} from 'vuex';
+  import { mapMutations } from 'vuex';
   export default {
+    data() {
+      return {
+        active: 0
+      }
+    },
     components: {
       'app-logInfo': LogInfo,
       'app-stopWatch': StopWatch,
       'app-submit-snackbar': SubmitSnackbar
     },
     computed: {
-      ...mapState([
-        'dynamicSteppersState'
-      ])
     },
     methods: {
       ...mapMutations([
         'submitLogInfo',
-        'dynamicSteppersStateChange'
-      ])
+      ]),
+      next() {
+        if (this.active++ > 1) this.active = 1;
+      },
     }
   }
 </script>
 
 <style>
-   #kind {
-     /*overflow: scroll;*/
-   }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #18ffff;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #64ffda;
+  }
+
+  .components {
+    text-align: center;
+    margin-top: 85px;
+  }
 </style>
