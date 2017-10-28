@@ -21,7 +21,7 @@
           <el-row>
               <el-col class="components">
                 <app-logInfo></app-logInfo>
-                <el-button @click="submitLogInfo(true)" type="primary" icon="plus">Add</el-button>
+                <el-button @click="submitLogInfo" type="primary" icon="plus">Add</el-button>
             </el-col>
           </el-row>
         </template>

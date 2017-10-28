@@ -17,7 +17,6 @@
         <v-list-tile-content>
           <v-list-tile-title>Weblite</v-list-tile-title>
         </v-list-tile-content>
-        </v-list-tile-action>
       </v-list-tile>
     </v-list>
 
@@ -53,6 +52,29 @@
     <v-toolbar class="elevation-12 grey lighten-2">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Log Lite</v-toolbar-title>
+      <div v-show="!readonly" style="margin-left:10px">
+        <el-button type="primary" icon="star-on" @click="ratingToRated"></el-button>
+      </div>
+      <div v-show="!readonly">
+        <el-rate
+          v-model="rating"
+          :texts="['oops', 'disappointed', 'normal', 'good', 'great']"
+          show-text
+          style="margin-left:10px">
+        </el-rate>
+      </div>
+      <div v-show="readonly">
+        <el-rate
+          v-model="rated"
+          disabled
+          show-text
+          text-color="#ff9900"
+          text-template="Thanks!:)"
+          style="margin-left:10px">
+        </el-rate>
+      </div>
+
+
     </v-toolbar>
     <main>
       <v-container fluid class='ma-0 pa-0'>
@@ -63,11 +85,13 @@
 </div>
 </template>
 
-
 <script>
   export default {
     data () {
       return {
+        rating: null,
+        rated: null,
+        readonly: false,
         drawer: null,
         right: null,
         items: [
@@ -81,6 +105,13 @@
         this.$store.dispatch('fetchLogsInfo')
       })
     },
+    methods: {
+      ratingToRated() {
+        this.rated = this.rating;
+        this.readonly = true;
+        return
+      }
+    }
   }
 </script>
 

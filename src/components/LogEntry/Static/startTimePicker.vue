@@ -2,7 +2,7 @@
   <el-time-picker
     :value="startTimePickerState"
     @input="startTimePickerStateChange"
-    placeholsder="start time">
+    placeholder="start time">
   </el-time-picker>
 </template>
 

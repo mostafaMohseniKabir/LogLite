@@ -2,7 +2,10 @@
   <el-time-picker
     :value="endTimePickerState"
     @input="endTimePickerStateChange"
-    placeholder="end time">
+    placeholder="end time"
+    :picker-options="{
+      selectableRange: convertedStartTime + ' - 23:59:59',
+    }">
   </el-time-picker>
 </template>
 
@@ -14,6 +17,7 @@ export default {
   computed: {
     ...mapState([
       'endTimePickerState',
+      'convertedStartTime',
     ]),
   },
   methods: {

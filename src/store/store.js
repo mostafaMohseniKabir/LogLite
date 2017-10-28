@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     dialog: false,
     datePickerState: null,
     startTimePickerState: null,
+    convertedStartTime: null,
     endTimePickerState: null,
     durationState: null,
     inputTagState: [],
@@ -34,16 +35,17 @@ export const store = new Vuex.Store({
     },
     stopWatchStarted: state => {
       state.datePickerState = moment().format('YYYY-MM-DD');
-      state.startTimePickerState = moment().format('HH:mm:ss');
+      state.startTimePickerState = moment();
     },
     stopWatchEnded: state => {
-      state.endTimePickerState = moment().format('HH:mm:ss');
+      state.endTimePickerState = moment();
     },
     datePickerStateChange: (state, payload) => {
       state.datePickerState = moment(payload).format('YYYY-MM-DD');
     },
     startTimePickerStateChange: (state, payload) => {
       state.startTimePickerState = payload;
+      state.convertedStartTime = moment(payload).format('HH:mm:ss');;
     },
     endTimePickerStateChange: (state, payload) => {
       state.endTimePickerState = payload;
@@ -98,9 +100,10 @@ export const store = new Vuex.Store({
       state.filterDatesState2 = payload;
     },
     submitLogInfo: state => {
-
+      console.log(JSON.stringify(state));
       // snackbar is opened
       state.snackbarState = true;
+
       // convert start time and end time to standard format
       state.endTimePickerState = moment(state.endTimePickerState).format('HH:mm:ss');
       state.startTimePickerState = moment(state.startTimePickerState).format('HH:mm:ss');
@@ -119,7 +122,7 @@ export const store = new Vuex.Store({
       //reset states
       state.startTimePickerState = null;
       state.endTimePickerState = null;
-      state.inputTagState = null;
+      state.inputTagState = [];
       //send to database
       request
         .post('http://localhost:3000/insertLogInfo')

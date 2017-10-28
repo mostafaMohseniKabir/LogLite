@@ -8,10 +8,10 @@
     default-first-option
     placeholder="Choose or add tags">
     <el-option
-      v-for="tag in tagsInventory"
-      :key="tag"
-      :label="tag"
-      :value="tag">
+      v-for="tag in filterTags"
+      :key="tag.value"
+      :label="tag.text"
+      :value="tag.value">
     </el-option>
   </el-select>
 </template>
@@ -26,7 +26,7 @@ export default {
       'inputTagState'
     ]),
     ...mapGetters([
-      'tagsInventory'
+      'filterTags'
     ])
   },
   methods: {
