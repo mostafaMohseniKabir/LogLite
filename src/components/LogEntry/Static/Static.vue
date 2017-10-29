@@ -21,7 +21,7 @@
           <el-row>
               <el-col class="components">
                 <app-logInfo></app-logInfo>
-                <el-button @click="submitLogInfo" type="primary" icon="plus">Add</el-button>
+                <el-button @click="submitLogInfo" type="primary" icon="plus" style="color: #1F2D3D; background-color: #ffb000">Add</el-button>
             </el-col>
           </el-row>
         </template>
@@ -29,10 +29,10 @@
     </el-carousel>
     <app-submit-snackbar></app-submit-snackbar>
 
-    <el-steps center :active="active">
-      <el-step title="Step 1" icon="time"></el-step>
-      <el-step title="Step 2" icon="date"></el-step>
-      <el-step title="Step 3" icon="document"></el-step>
+    <el-steps style="margin:5px 5px; color: #ffb000" center :active="active">
+      <el-step title="Time" icon="time"s></el-step>
+      <el-step title="Date" icon="date"></el-step>
+      <el-step title="Tags" icon="document"></el-step>
     </el-steps>
   </div>
 </template>
@@ -79,15 +79,14 @@ export default {
   }
 
   .el-carousel__item:nth-child(3n) {
-    background-color: #18ffff;
+    background-color: #475669;
   }
-
   .el-carousel__item:nth-child(3n+1) {
-    background-color: #64ffda;
+    background-color: #1F2D3D;
   }
 
   .el-carousel__item:nth-child(3n+2) {
-    background-color: #dce775;
+    background-color: #324057;
   }
 
   .components {

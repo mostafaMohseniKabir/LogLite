@@ -4,39 +4,39 @@
     <v-navigation-drawer
       temporary
       v-model="drawer"
-      class="blue lighten-3"
+      :style="{'background-color': navbarColor}"
       light
       overflow
     >
     <!-- application intro in drawer -->
-    <v-list class="pa-1 blue lighten-3">
+    <v-list class="pa-1" :style="{'background-color': navbarColor, 'color': color}">
       <v-list-tile avatar>
         <v-list-tile-avatar>
           <img src="../public/photo_2017-08-30_15-36-52.jpg" />
         </v-list-tile-avatar>
-        <v-list-tile-content>
+        <v-list-tile-content style="color:#ffffff">
           <v-list-tile-title>Weblite</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
 
     <!-- list in navigation drawer -->
-    <v-list class="blue lighten-3">
+    <v-list :style="{'background-color': navbarColor, 'color': color}">
       <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
         <v-list-tile slot="item" @click="">
           <v-list-tile-action>
-            <v-icon large class="blue--text text--darken-2">{{ item.icon }}</v-icon>
+            <v-icon large>{{ item.icon }}</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>
+          <v-list-tile-content style="color:#ffffff">
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-icon>keyboard_arrow_down</v-icon>
+            <v-icon style="color:#ffffff">keyboard_arrow_down</v-icon>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile class="blue lighten-3" v-for="subItem in item.subItems" v-bind:key="subItem.title" @click="">
+        <v-list-tile v-for="subItem in item.subItems" v-bind:key="subItem.title" :style="{'background-color': navbarColor, 'color': color}">
           <router-link :to="subItem.link">
-            <v-list-tile-content>
+            <v-list-tile-content style="color:#ffffff">
               <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
@@ -49,32 +49,33 @@
     </v-navigation-drawer>
 
     <!-- toolbar -->
-    <v-toolbar class="elevation-12 grey lighten-2">
+    <v-toolbar class="elevation-12" :style="{'background-color': toolbarColor}">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Log Lite</v-toolbar-title>
-      <div v-show="!readonly" style="margin-left:10px">
-        <el-button type="primary" icon="star-on" @click="ratingToRated"></el-button>
-      </div>
-      <div v-show="!readonly">
+      <div v-show="!readonly" style="margin-left:auto; margin-right:0">
         <el-rate
           v-model="rating"
-          :texts="['oops', 'disappointed', 'normal', 'good', 'great']"
-          show-text
+          @change="rateChanged = true"
+          :colors="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
+          void-color="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
           style="margin-left:10px">
         </el-rate>
       </div>
-      <div v-show="readonly">
+      <div v-show="readonly" style="margin-left:auto; margin-right:5px">
         <el-rate
           v-model="rated"
+          :colors="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
+          void-color="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
           disabled
           show-text
-          text-color="#ff9900"
+          text-color="#1F2D3D"
           text-template="Thanks!:)"
           style="margin-left:10px">
         </el-rate>
       </div>
-
-
+      <div v-show="!readonly && rateChanged">
+        <el-button style="color: #1F2D3D" type="text" @click="ratingToRated">Rate it!</el-button>
+      </div>
     </v-toolbar>
     <main>
       <v-container fluid class='ma-0 pa-0'>
@@ -86,17 +87,21 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
   export default {
     data () {
       return {
+        color: '#ffffff',
         rating: null,
         rated: null,
         readonly: false,
+        rateChanged: false,
         drawer: null,
         right: null,
         items: [
               { title: 'Enter Log', icon:'present_to_all', subItems: [{title: 'Static',icon:'', link: '/' }, {title: 'Dynamic', icon:'', link: '/Dynamic'}]},
-              { title: 'Overview', icon: 'list', subItems: [{title: 'Log List',icon:'', link: '/Overview/LogList'}, {title: 'Statistics',icon:'', link: '/Overview/Statistics'}]}
+              { title: 'Overview', icon: 'list', subItems: [{title: 'Log List',icon:'', link: '/Overview/LogList'}, {title: 'Statistics',icon:'', link: '/Overview/Statistics'}]},
+              { title: 'Setting', icon: 'build', subItems: [{title: 'Color',icon:'', link: '/Setting/Setting'}]}
             ]
       }
     },
@@ -104,6 +109,12 @@
       this.$nextTick(function () {
         this.$store.dispatch('fetchLogsInfo')
       })
+    },
+    computed: {
+      ...mapState([
+        'navbarColor',
+        'toolbarColor',
+      ])
     },
     methods: {
       ratingToRated() {

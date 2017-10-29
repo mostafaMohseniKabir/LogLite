@@ -1,13 +1,14 @@
 <template>
   <div>
     <el-table
-      :data="logsInfo"
+      :data="filterDate"
       border
       highlight-current-row
       tooltip-effect="dark"
       :summary-method="getSummaries"
       show-summary
-      style="width: 100% margin-top: 20px">
+      style="width: 100%; margin-top: 20px">
+
       <el-table-column
         prop="date"
         label="Date"
@@ -20,20 +21,25 @@
           <span style="margin-left: 10px">{{ scope.row.date }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="startTime"
         label="Start Time"
+        sortable
         show-overflow-tooltip
         align="center"
-        min-width="120">
+        min-width="125">
       </el-table-column>
+
       <el-table-column
         prop="endTime"
         label="End Time"
+        sortable
         show-overflow-tooltip
         align="center"
         min-width="120">
       </el-table-column>
+
       <el-table-column
         prop="duration"
         label="Duration"
@@ -42,6 +48,7 @@
         align="center"
         min-width="120">
       </el-table-column>
+
       <el-table-column
         prop="tag"
         label="tag"
@@ -52,34 +59,42 @@
           <template scope="scope">
               <div slot="reference" class="name-wrapper">
                 <template v-for="tag in scope.row.tag">
-                  <el-tag style="margin-left: 10px" type="warning">{{ tag }}</el-tag>
+                  <el-tag style="margin-left: 10px; color: #000000; background-color: #ffb000">{{ tag }}</el-tag>
                 </template>
               </div>
           </template>
       </el-table-column>
+
       <el-table-column
         prop="_id"
         label="action"
         align="center"
         min-width="100">
         <template scope="scope">
-          <el-popover
-            ref="popover"
-            placement="left"
-            align="center"
-            width="160"
-            :value="popoverVisible"
-            @input="popoverVisibleChange(true)">
-            <p>Are you sure to delete this?</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="popoverVisibleChange(false)">cancel</el-button>
-              <el-button size="mini" type="primary" @click="deleteLogInfo(scope.row._id)">confirm</el-button>
-            </div>
-          </el-popover>
-          <el-button  v-popover:popover type="danger" icon="delete" size="small">Delete</el-button>
+          <el-button @click="hadnleDelete(scope.$index)" icon="delete" size="small" style="color: #000000; background-color: #ffb000">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      title="Tips"
+      :visible.sync="dialogVisible"
+      size="tiny">
+      <span>Are you sure to delete this?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button style="color: #000000; background-color: #ffb000" @click="dialogVisible = false">Cancel</el-button>
+        <el-button style="color: #000000; background-color: #ffb000" @click="handleConfirm()">Confirm</el-button>
+      </span>
+    </el-dialog>
+
+    <el-date-picker
+     :value="rangeDate"
+     @input="rangeDateChange"
+     type="daterange"
+     placeholder="Pick a range"
+     style="margin-top:10px; margin-left: 10px">
+    </el-date-picker>
+
     <app-delete-snackbar></app-delete-snackbar>
   </div>
 </template>
@@ -96,20 +111,34 @@
       components: {
         'app-delete-snackbar': SnackbarForDelete,
       },
+      data() {
+        return {
+          index: null,
+          dialogVisible: false,
+        };
+      },
       computed: {
         ...mapState([
-          'popoverVisible',
-          'logsInfo'
+          'rangeDate',
         ]),
         ...mapGetters([
-          'filterTags'
+          'filterTags',
+          'filterDate',
         ])
       },
       methods: {
         ...mapMutations([
           'deleteLogInfo',
-          'popoverVisibleChange',
+          'rangeDateChange',
         ]),
+        hadnleDelete(index) {
+          this.dialogVisible = true;
+          this.index = index;
+        },
+        handleConfirm() {
+          this.dialogVisible = false;
+          this.$store.commit('deleteLogInfo', this.index)
+        },
         getSummaries(param) {
           const { columns, data } = param;
           const sums = [];
@@ -128,15 +157,13 @@
                   return prev;
                 }
               }, 0);
-            } else {
-              sums[index] = 'N/A';
             }
           });
-         sums[3] = moment.utc(sums[3]).format("HH:mm:ss")
-         return sums;
-       },
-       filterTag(value, row) {
-        return R.contains(value, row.tag);
+          sums[3] = moment.utc(sums[3]).format("HH:mm:ss")
+          return sums;
+        },
+        filterTag(value, row) {
+          return R.contains(value, row.tag);
       }
     }
   }

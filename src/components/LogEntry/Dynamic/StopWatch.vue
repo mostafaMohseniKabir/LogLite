@@ -1,7 +1,7 @@
 <template>
   <v-container fluid grid-list-md text-xs-center class="ma-0 pa-0">
     <v-layout row wrap>
-      <v-flex xs12 id="clock">
+      <v-flex xs12 id="clock" style="color:#ffffff">
         {{stopWatch}}
       </v-flex>
       <v-flex xs12 align-content-center>
@@ -9,10 +9,10 @@
           <v-icon v-if = "!runState">play_arrow</v-icon>
           <v-icon v-if= "runState">stop</v-icon>
         </v-btn>
-      </v-flex>
-        <!-- <v-btn success fab dark small @click='stopWatchReseted'>
+        <v-btn success fab dark small @click='stopWatchReseted'>
           <v-icon>restore</v-icon>
-        </v-btn> -->
+        </v-btn>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -25,16 +25,17 @@ export default {
     return {
       stopWatch: moment().hour(0).minute(0).second(0).millisecond(0).format('H:mm:ss:S'),
       myVar: null,
-      runState: false
+      runState: false,
+      counter: 1,
       }
   },
   methods: {
     stopWatchStarted: function() {
       this.runState = true;    //for switch in DOM (between play and pause state)
-      var counter = 1;        //start point set to 1 every times this function is called
+       //start point set to 1 every times this function is called
       this.$store.commit('stopWatchStarted');  //to save start time of stopwatch
       this.myVar = setInterval(() => {    //every 10 millisecond add 10 milliseconds to counter and show it in standard format
-         this.stopWatch = moment().hour(0).minute(0).second(0).millisecond(counter+=10).format('H:mm:ss:S');
+         this.stopWatch = moment().hour(0).minute(0).second(0).millisecond(this.counter+=10).format('H:mm:ss:S');
        },10)
     },
     stopWatchEnded: function() {

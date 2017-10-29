@@ -10,7 +10,9 @@ export const store = new Vuex.Store({
   debug: true,
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    popoverVisible: false,
+    toolbarColor: 'rgba(255, 176, 0, 1)',
+    navbarColor: 'rgba(31, 45, 64, 1)',
+    dialogVisible: false,
     snackbarForDelete: false,
     dialog: false,
     datePickerState: null,
@@ -20,18 +22,25 @@ export const store = new Vuex.Store({
     durationState: null,
     inputTagState: [],
     snackbarState: false,
-    filterTagsState: null,
-    filterDatesState: null,
-    filterDatesState2: null,
+    rangeDate: '',
     logsInfo: [],
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   mutations: {
-    popoverVisibleChange: (state, payload) => {
-      state.popoverVisible =  payload;
+    dialogVisibleChange: (state, payload) => {
+      state.toolbarColor = payload;
+    },
+    toolbarColorChange: (state, payload) => {
+      state.toolbarColor = payload;
+    },
+    navbarColorChange: (state, payload) => {
+      state.navbarColor = payload;
+    },
+    rangeDateChange: (state, payload) => {
+      state.rangeDate = payload;
     },
     importFromServer: (state, payload) => {
-      state.logsInfo =  payload;
+      state.logsInfo = payload;
     },
     stopWatchStarted: state => {
       state.datePickerState = moment().format('YYYY-MM-DD');
@@ -70,25 +79,26 @@ export const store = new Vuex.Store({
     },
     deleteLogInfo: (state, payload) => {
 
-      const index = R.findIndex(R.propEq('_id', payload))(state.logsInfo)
-
       //popover is closed
-      state.popoverVisible = false;
+      state.dialogVisible = false;
 
       // snackbar is opened
       state.snackbarForDelete = true;
+
+
+      // const index = R.findIndex(R.propEq('_id', payload))(state.logsInfo)
 
       //remove from database
       request
         .post('http://localhost:3000/deleteLogInfo')
         .set('Access-Control-Allow-Origin', '*')
-        .send(state.logsInfo[index])
+        .send(state.logsInfo[payload])
         .end(function(err, res){
              err || !res.ok ? alert('Oh no! error') : alert('yay deleted')
          })
 
        //delete logsInfo from the view
-       state.logsInfo.splice(index,1);
+       state.logsInfo.splice(payload,1);
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -135,17 +145,10 @@ export const store = new Vuex.Store({
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getters: {
-    filteredLogsInfoInLogList: state => state.logsInfo.filter((logInfo) =>   //filter by tags
-        state.filterTagsState === null ? true : state.filterTagsState.includes(logInfo.tag))
-        .filter((filteredLogInfoByTag) =>   //filter by dates
-          state.filterDatesState === null ? true : filteredLogInfoByTag.date.match(state.filterDatesState)),
 
-    totalDuration: (state, getters) =>
-      moment.utc(R.reduce(R.add, 0, R.map(x => x.duration, getters.filteredLogsInfoInLogList))).format("HH:mm:ss"),
-
-    filteredLogsInfoInStatistics: state => state.logsInfo.filter((logInfo) =>   //filter by dates
-       state.filterDatesState2 === null ? true : logInfo.date.match(state.filterDatesState2)),
-
+    // totalDuration: (state, getters) =>
+    //   moment.utc(R.reduce(R.add, 0, R.map(x => x.duration, getters.filteredLogsInfoInLogList))).format("HH:mm:ss"),
+    //
     // dataSets: (state, getters) => R.reduce((acc, logIngo) => R.has(logIngo.tag)(acc) ?
     //    R.assoc(logIngo.tag, logIngo.tag + logIngo.duration, acc) :
     //    R.assoc(logIngo.tag, logIngo.duration, acc), {}, getters.filteredLogsInfoInStatistics),
@@ -162,8 +165,12 @@ export const store = new Vuex.Store({
 
     tagsInventory: state => R.uniq(R.unnest(R.map(x => R.prop('tag', x), state.logsInfo))),
 
-    filterTags: (state, getters) => R.map(tag => R.zipObj(['text', 'value'], [tag, tag]), getters.tagsInventory)
-  },
+    filterTags: (state, getters) => R.map(tag => R.zipObj(['text', 'value'], [tag, tag]), getters.tagsInventory),
+
+    filterDate: state => (state.rangeDate) ?
+      (state.logsInfo.filter((logInfo) => (moment(state.rangeDate[0]) <= moment(logInfo.date) &&  moment(logInfo.date) <= moment(state.rangeDate[1])) ? true : false))
+      : (state.logsInfo),
+    },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
     fetchLogsInfo (context) {
