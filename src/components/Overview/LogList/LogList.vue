@@ -1,7 +1,28 @@
 <template>
   <div>
+    <el-date-picker
+     :value="rangeDate"
+     @input="rangeDateChange"
+     type="daterange"
+     placeholder="Pick a range"
+     style="margin-top:10px; margin-left: 10px">
+    </el-date-picker>
+
+    <el-select
+    :value="filterTagSelect"
+    @input="filterTagSelectChange"
+    multiple
+    placeholder="Filter Tags">
+      <el-option
+        v-for="tag in tagsInventory"
+        :key="tag"
+        :label="tag"
+        :value="tag">
+      </el-option>
+    </el-select>
+
     <el-table
-      :data="filterDate"
+      :data="doubledFlitredLogsInfo"
       border
       highlight-current-row
       tooltip-effect="dark"
@@ -55,7 +76,7 @@
         show-overflow-tooltip
         align="center"
         min-width="360"
-        :filters="filterTags" :filter-method="filterTag" filter-placement="bottom-start">
+        :filters="filterTags" :filter-method="filterTag" filter-placement="bottom">
           <template scope="scope">
               <div slot="reference" class="name-wrapper">
                 <template v-for="tag in scope.row.tag">
@@ -87,15 +108,6 @@
       </span>
     </el-dialog>
 
-    <el-date-picker
-     :value="rangeDate"
-     @input="rangeDateChange"
-     type="daterange"
-     placeholder="Pick a range"
-     style="margin-top:10px; margin-left: 10px">
-    </el-date-picker>
-
-    <app-delete-snackbar></app-delete-snackbar>
   </div>
 </template>
 
@@ -103,13 +115,13 @@
   const R = require('ramda');
   var moment = require('moment');
   moment().format();
-  import SnackbarForDelete from './SnackbarForDelete.vue';
+
   import { mapState } from 'vuex';
   import { mapGetters } from 'vuex';
   import { mapMutations } from 'vuex';
   export default {
       components: {
-        'app-delete-snackbar': SnackbarForDelete,
+
       },
       data() {
         return {
@@ -120,16 +132,19 @@
       computed: {
         ...mapState([
           'rangeDate',
+          'filterTagSelect'
         ]),
         ...mapGetters([
           'filterTags',
-          'filterDate',
+          'doubledFlitredLogsInfo',
+          'tagsInventory'
         ])
       },
       methods: {
         ...mapMutations([
           'deleteLogInfo',
           'rangeDateChange',
+          'filterTagSelectChange'
         ]),
         hadnleDelete(index) {
           this.dialogVisible = true;
@@ -138,6 +153,12 @@
         handleConfirm() {
           this.dialogVisible = false;
           this.$store.commit('deleteLogInfo', this.index)
+          this.$notify.info({
+            title: 'Info',
+            message: 'Deleted successfully!',
+            offset: 200,
+            duration: 1500
+          });
         },
         getSummaries(param) {
           const { columns, data } = param;
@@ -163,6 +184,7 @@
           return sums;
         },
         filterTag(value, row) {
+          console.log(value)
           return R.contains(value, row.tag);
       }
     }

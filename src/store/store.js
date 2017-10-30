@@ -12,8 +12,6 @@ export const store = new Vuex.Store({
   state: {
     toolbarColor: 'rgba(255, 176, 0, 1)',
     navbarColor: 'rgba(31, 45, 64, 1)',
-    dialogVisible: false,
-    snackbarForDelete: false,
     dialog: false,
     datePickerState: null,
     startTimePickerState: null,
@@ -21,12 +19,16 @@ export const store = new Vuex.Store({
     endTimePickerState: null,
     durationState: null,
     inputTagState: [],
-    snackbarState: false,
+    filterTagSelect: [],
     rangeDate: '',
     logsInfo: [],
+    wis: 101,
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   mutations: {
+    replaceLogInfo: (state, payload) => {
+      state.logsInfo.splice([state.logsInfo.length-1], 1, payload)
+    },
     dialogVisibleChange: (state, payload) => {
       state.toolbarColor = payload;
     },
@@ -54,7 +56,7 @@ export const store = new Vuex.Store({
     },
     startTimePickerStateChange: (state, payload) => {
       state.startTimePickerState = payload;
-      state.convertedStartTime = moment(payload).format('HH:mm:ss');;
+      state.convertedStartTime = moment(payload).format('HH:mm:ss');
     },
     endTimePickerStateChange: (state, payload) => {
       state.endTimePickerState = payload;
@@ -68,37 +70,14 @@ export const store = new Vuex.Store({
     inputTagStateChange: (state, payload) => {
       state.inputTagState = payload;
     },
-    snackbarStateChange: (state, payload) => {
-      state.snackbarState = payload;
-    },
-    snackbarForDeleteStateChange: (state, payload) => {
-      state.snackbarForDelete = payload;
-    },
-    dialogChangeState: (state, payload) => {
-      state.dialog = payload;
+    filterTagSelectChange: (state, payload) => {
+      state.filterTagSelect = payload;
     },
     deleteLogInfo: (state, payload) => {
-
-      //popover is closed
-      state.dialogVisible = false;
-
-      // snackbar is opened
-      state.snackbarForDelete = true;
-
-
-      // const index = R.findIndex(R.propEq('_id', payload))(state.logsInfo)
-
-      //remove from database
-      request
-        .post('http://localhost:3000/deleteLogInfo')
-        .set('Access-Control-Allow-Origin', '*')
-        .send(state.logsInfo[payload])
-        .end(function(err, res){
-             err || !res.ok ? alert('Oh no! error') : alert('yay deleted')
-         })
-
-       //delete logsInfo from the view
-       state.logsInfo.splice(payload,1);
+      //call action
+      store.dispatch('removeLogInfo', payload);
+      //delete logsInfo from the view
+      state.logsInfo.splice(payload,1);
     },
     filterTagsStateChange: (state, payload) => {
       state.filterTagsState = payload;
@@ -110,37 +89,26 @@ export const store = new Vuex.Store({
       state.filterDatesState2 = payload;
     },
     submitLogInfo: state => {
-      console.log(JSON.stringify(state));
-      // snackbar is opened
-      state.snackbarState = true;
-
+      // calculate duration
+      state.durationState = moment(state.endTimePickerState).diff(moment(state.startTimePickerState));
       // convert start time and end time to standard format
       state.endTimePickerState = moment(state.endTimePickerState).format('HH:mm:ss');
       state.startTimePickerState = moment(state.startTimePickerState).format('HH:mm:ss');
-
-
-      // calculation of duration
-      state.durationState = moment(state.datePickerState + "T" + state.endTimePickerState).diff(moment(state.datePickerState + "T" + state.startTimePickerState));
-
+      //push to state
       state.logsInfo.push({
           tag: state.inputTagState,
           startTime: state.startTimePickerState,
           endTime: state.endTimePickerState,
           date: state.datePickerState,
-          duration: state.durationState
+          duration: state.durationState,
+          wis: state.wis,
       });
       //reset states
       state.startTimePickerState = null;
       state.endTimePickerState = null;
       state.inputTagState = [];
-      //send to database
-      request
-        .post('http://localhost:3000/insertLogInfo')
-        .set('Access-Control-Allow-Origin', '*')
-        .send(state.logsInfo[state.logsInfo.length-1])
-        .end(function(err, res){
-             err || !res.ok ? alert('Oh no! error') : alert('yay got')
-         })
+      //call action
+      store.dispatch('insertLogInfo')
     }
   },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +116,6 @@ export const store = new Vuex.Store({
 
     // totalDuration: (state, getters) =>
     //   moment.utc(R.reduce(R.add, 0, R.map(x => x.duration, getters.filteredLogsInfoInLogList))).format("HH:mm:ss"),
-    //
     // dataSets: (state, getters) => R.reduce((acc, logIngo) => R.has(logIngo.tag)(acc) ?
     //    R.assoc(logIngo.tag, logIngo.tag + logIngo.duration, acc) :
     //    R.assoc(logIngo.tag, logIngo.duration, acc), {}, getters.filteredLogsInfoInStatistics),
@@ -163,23 +130,48 @@ export const store = new Vuex.Store({
 
     datesInventory: state => R.uniq(R.map(x => R.prop('date', x), state.logsInfo)),
 
-    tagsInventory: state => R.uniq(R.unnest(R.map(x => R.prop('tag', x), state.logsInfo))),
+    filteredLogInfoByDate: state => (state.rangeDate) ?
+      (state.logsInfo.filter((logInfo) => (moment(state.rangeDate[0]) <= moment(logInfo.date) &&  moment(logInfo.date) <= moment(state.rangeDate[1])) ? true : false))
+      : (state.logsInfo),
+
+    tagsInventory: (state, getters) => R.uniq(R.unnest(R.map(x => R.prop('tag', x), getters.filteredLogInfoByDate))),
+
+    doubledFlitredLogsInfo: (state, getters) => getters.filteredLogInfoByDate.filter((logInfo) =>
+      R.reduce(R.and, true, R.map(x => R.contains(x, logInfo.tag), state.filterTagSelect))),
 
     filterTags: (state, getters) => R.map(tag => R.zipObj(['text', 'value'], [tag, tag]), getters.tagsInventory),
 
-    filterDate: state => (state.rangeDate) ?
-      (state.logsInfo.filter((logInfo) => (moment(state.rangeDate[0]) <= moment(logInfo.date) &&  moment(logInfo.date) <= moment(state.rangeDate[1])) ? true : false))
-      : (state.logsInfo),
+
     },
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   actions: {
-    fetchLogsInfo (context) {
+    fetchLogsInfo ({ commit, state }) {
       request
-        .get('http://localhost:3000')
+        .get('http://localhost:3080')
         .set('Access-Control-Allow-Origin', '*')
+        .query({ wis: state.wis })
         .end(function(err, res){
-          context.commit('importFromServer', res.body )
-        });
+          commit('importFromServer', res.body )
+        })
+      },
+      insertLogInfo ({ commit, state }) {
+        request
+          .post('http://localhost:3080/insertLogInfo')
+          .set('Access-Control-Allow-Origin', '*')
+          .send(state.logsInfo[state.logsInfo.length-1])
+          .end(function(err, res){
+              //  err || !res.ok ? alert('Oh no! error') : alert('yay got')
+               commit('replaceLogInfo', JSON.parse(res.text) )
+           })
+      },
+      removeLogInfo ({ commit, state }, payload) {
+        request
+          .get('http://localhost:3080/deleteLogInfo')
+          .set('Access-Control-Allow-Origin', '*')
+          .query({ _id: state.logsInfo[payload]._id })
+          .end(function(err, res){
+              //  err || !res.ok ? alert('Oh no! error') : alert('yay deleted')
+           })
+      },
     }
-  }
 })

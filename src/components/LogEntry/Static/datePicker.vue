@@ -3,7 +3,10 @@
     :value="datePickerState"
     @input="datePickerStateChange"
     type="date"
-    placeholder="Pick a day">
+    placeholder="Pick a day"
+    :picker-options="{
+      
+    }">
   </el-date-picker>
 </template>
 

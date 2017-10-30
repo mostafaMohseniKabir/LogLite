@@ -1,3 +1,6 @@
+
+
+
 <template>
   <div>
   <v-app toolbar>
@@ -56,7 +59,7 @@
         <el-rate
           v-model="rating"
           @change="rateChanged = true"
-          :colors="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
+          :colors="['#1F2D3D', '#1F2D3D', '#000000']"
           void-color="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
           style="margin-left:10px">
         </el-rate>
@@ -64,7 +67,6 @@
       <div v-show="readonly" style="margin-left:auto; margin-right:5px">
         <el-rate
           v-model="rated"
-          :colors="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
           void-color="['#1F2D3D', '#1F2D3D', '#1F2D3D']"
           disabled
           show-text
@@ -128,4 +130,9 @@
 
 <style lang="stylus">
   @import './stylus/main'
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
 </style>

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
+var ObjectID = require("mongodb").ObjectID
 var cors = require('cors');
 app.use(cors({
   origin: '*',
@@ -20,22 +21,20 @@ function errorHandler(err, req, res, next) {
 app.use(errorHandler);
 
 var db
-MongoClient.connect('mongodb://localhost:27017/test', function(err, database) {
+MongoClient.connect('mongodb://localhost:27017/LogLite', function(err, database) {
   if(err) throw err.message;
   db = database;
-  var query = {'tag': 'break'};
-  // var projection = {'tag': 1, '__id': 0};
-  app.listen(3000, function () {
-    console.log('Example app listening on port 3000!')
+  app.listen(3080, function () {
+    console.log('LogLite wapp listening on port 3080!')
   })
 });
 
 app.get('/', function (req, res) {
-  // var projection = {'tag': 1, 'date': 1, 'startTime': 1, 'endTime': 1, 'duration': 1, '__id': 0};
-  db.collection('logsInfo').find({}).toArray((err, doc) => {
-    console.log('from get!')
+  projection = {'wis': 1, 'tag': 1, 'startTime': 1, 'endTime': 1, 'date': 1, 'duration': 1, '_id': 1};
+  const query = { wis: Number(req.query.wis) };
+  db.collection('logsInfo').find(query, projection).toArray((err, doc) => {
     if(err) throw err;
-    res.json(doc)
+    res.json(doc);
   })
 })
 
@@ -44,13 +43,15 @@ app.post('/insertLogInfo', (req, res) => {
     console.log(req.body)
     if (err) return console.log(err)
     console.log('saved to database')
-    res.send('inserted successfully!')
+    res.send(result.ops[0])
   })
 })
 
-app.post('/deleteLogInfo', (req, res) => {
-  db.collection('logsInfo').remove(req.body, (err, result) => {
-    console.log(req.body)
+app.get('/deleteLogInfo', (req, res) => {
+  const query = { _id: ObjectID(req.query._id) };
+  console.log(query);
+  db.collection('logsInfo').remove(query, (err, result) => {
+    console.log(result)
     if (err) return console.log(err)
     console.log('removed from database')
     res.send('deleted successfully!')
