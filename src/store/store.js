@@ -90,7 +90,7 @@ export const store = new Vuex.Store({
     },
     submitLogInfo: state => {
       // calculate duration
-      state.durationState = moment(state.endTimePickerState).diff(moment(state.startTimePickerState));
+      state.durationState = moment.utc(moment(state.endTimePickerState).diff(moment(state.startTimePickerState))).format("HH:mm:ss");
       // convert start time and end time to standard format
       state.endTimePickerState = moment(state.endTimePickerState).format('HH:mm:ss');
       state.startTimePickerState = moment(state.startTimePickerState).format('HH:mm:ss');

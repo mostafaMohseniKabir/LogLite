@@ -1,55 +1,42 @@
-
-
-
 <template>
   <div>
-  <v-app toolbar>
-    <v-navigation-drawer
-      temporary
-      v-model="drawer"
-      :style="{'background-color': navbarColor}"
-      light
-      overflow
-    >
-    <!-- application intro in drawer -->
-    <v-list class="pa-1" :style="{'background-color': navbarColor, 'color': color}">
-      <v-list-tile avatar>
-        <v-list-tile-avatar>
-          <img src="../public/photo_2017-08-30_15-36-52.jpg" />
-        </v-list-tile-avatar>
-        <v-list-tile-content style="color:#ffffff">
-          <v-list-tile-title>Weblite</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-
-    <!-- list in navigation drawer -->
-    <v-list :style="{'background-color': navbarColor, 'color': color}">
-      <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
-        <v-list-tile slot="item" @click="">
-          <v-list-tile-action>
-            <v-icon large>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content style="color:#ffffff">
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-icon style="color:#ffffff">keyboard_arrow_down</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile v-for="subItem in item.subItems" v-bind:key="subItem.title" :style="{'background-color': navbarColor, 'color': color}">
-          <router-link :to="subItem.link">
+    <v-app toolbar>
+    <v-layout wrap>
+      <v-navigation-drawer
+        temporary
+        v-model="drawer"
+        :style="{'background-color': navbarColor}"
+        light
+        overflow
+      >
+      <!-- application intro in drawer -->
+        <v-list class="pa-1" :style="{'background-color': navbarColor, 'color': color}">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="../public/photo_2017-08-30_15-36-52.jpg" />
+            </v-list-tile-avatar>
             <v-list-tile-content style="color:#ffffff">
-              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+              <v-list-tile-title>Weblite</v-list-tile-title>
             </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+
+        <!-- list in navigation drawer -->
+        <v-list class="pt-0" :style="{'background-color': navbarColor, 'color': color}" dense>
+          <v-divider></v-divider>
+          <v-list-tile v-for="item in items" :key="item.title">
             <v-list-tile-action>
-              <v-icon>{{ subItem.icon }}</v-icon>
-              </v-list-tile-action>
+              <v-icon large>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <router-link :to="item.link">
+            <v-list-tile-content style="color:#ffffff">
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
             </router-link>
           </v-list-tile>
-        </v-list-group>
-      </v-list>
-    </v-navigation-drawer>
+        </v-list>
+      </v-navigation-drawer>
+    </v-layout>
 
     <!-- toolbar -->
     <v-toolbar class="elevation-12" :style="{'background-color': toolbarColor}">
@@ -85,7 +72,7 @@
       </v-container>
     </main>
   </v-app>
-</div>
+  </div>
 </template>
 
 <script>
@@ -98,13 +85,14 @@
         rated: null,
         readonly: false,
         rateChanged: false,
-        drawer: null,
+        drawer: false,
         right: null,
         items: [
-              { title: 'Enter Log', icon:'present_to_all', subItems: [{title: 'Static',icon:'', link: '/' }, {title: 'Dynamic', icon:'', link: '/Dynamic'}]},
-              { title: 'Overview', icon: 'list', subItems: [{title: 'Log List',icon:'', link: '/Overview/LogList'}, {title: 'Statistics',icon:'', link: '/Overview/Statistics'}]},
-              { title: 'Setting', icon: 'build', subItems: [{title: 'Color',icon:'', link: '/Setting/Setting'}]}
-            ]
+            { title: 'Dynamic Log', icon: 'list', link: '/'},
+            { title: 'Static Log', icon:'present_to_all', link: '/StaticLog' },
+            { title: 'Overview', icon: 'list', link: '/Overview'},
+            { title: 'Setting', icon: 'build', link: '/Setting'}
+          ],
       }
     },
     mounted: function() {
@@ -130,9 +118,4 @@
 
 <style lang="stylus">
   @import './stylus/main'
-
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
 </style>

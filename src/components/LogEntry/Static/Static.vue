@@ -65,7 +65,7 @@
         this.$notify.success({
           title: 'Success',
           message: 'submitted successfully!',
-          offset: 200,
+          // offset: 200,
           duration: 1500,
         });
         this.$store.commit('submitLogInfo');
