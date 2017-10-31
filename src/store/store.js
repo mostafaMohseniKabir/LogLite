@@ -104,7 +104,7 @@ export const store = new Vuex.Store({
           wis: state.wis,
       });
       //reset states
-      state.startTimePickerState = null;
+      state.startTimePickerState = new Date();
       state.endTimePickerState = null;
       state.inputTagState = [];
       //call action
